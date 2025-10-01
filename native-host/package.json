@@ -1,0 +1,15 @@
+{
+  "name": "markdown-printer-host",
+  "version": "1.0.0",
+  "description": "Native messaging host for Markdown Printer Chrome extension",
+  "main": "host.js",
+  "scripts": {
+    "test": "node host.js"
+  },
+  "keywords": ["chrome", "native-messaging", "markdown"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "turndown": "^7.1.2"
+  }
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      width: 300px;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+    h1 {
+      font-size: 18px;
+      margin: 0 0 15px 0;
+      color: #333;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #45a049;
+    }
+    button:active {
+      background: #3d8b40;
+    }
+    .info {
+      margin-top: 15px;
+      font-size: 12px;
+      color: #666;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <h1>Markdown Printer</h1>
+  <button id="saveBtn">Save Page as Markdown</button>
+  <div class="info">
+    Click to save the current page as a Markdown file in ~/MarkdownPrints/
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

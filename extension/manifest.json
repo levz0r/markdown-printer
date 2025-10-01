@@ -1,0 +1,38 @@
+{
+  "manifest_version": 3,
+  "name": "Markdown Printer",
+  "version": "1.0.0",
+  "description": "Save web pages as Markdown files",
+  "permissions": [
+    "activeTab",
+    "contextMenus",
+    "nativeMessaging",
+    "scripting",
+    "notifications"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["icon48.png"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

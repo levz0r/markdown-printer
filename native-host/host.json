@@ -1,0 +1,9 @@
+{
+  "name": "com.markdownprinter.host",
+  "description": "Markdown Printer Native Host",
+  "path": "HOST_PATH_PLACEHOLDER",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://EXTENSION_ID_PLACEHOLDER/"
+  ]
+}
