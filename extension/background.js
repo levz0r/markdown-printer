@@ -1,6 +1,5 @@
 // Create context menu on installation
 chrome.runtime.onInstalled.addListener(() => {
-  console.log('Extension installed, creating context menu');
   chrome.contextMenus.create({
     id: 'saveAsMarkdown',
     title: 'Save as Markdown',
@@ -10,7 +9,6 @@ chrome.runtime.onInstalled.addListener(() => {
 
 // Handle context menu click
 chrome.contextMenus.onClicked.addListener((info, tab) => {
-  console.log('Context menu clicked:', info.menuItemId);
   if (info.menuItemId === 'saveAsMarkdown') {
     savePageAsMarkdown(tab.id);
   }
@@ -35,84 +33,76 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
 async function savePageAsMarkdown(tabId) {
   try {
-    console.log('savePageAsMarkdown called for tab:', tabId);
-
-    // Load settings
-    const settings = await chrome.storage.sync.get({
-      savePath: '',
-      openAfterSave: false
+    // Inject Turndown library and conversion script
+    await chrome.scripting.executeScript({
+      target: { tabId: tabId },
+      files: ['turndown.js']
     });
-    console.log('Settings loaded:', settings);
 
-    // Inject script to get page content
+    // Inject script to convert and get markdown
     const results = await chrome.scripting.executeScript({
       target: { tabId: tabId },
-      func: extractPageContent
+      func: extractAndConvertToMarkdown
     });
 
     if (!results || !results[0]) {
-      console.error('Failed to extract page content');
-      return;
+      throw new Error('Failed to extract page content');
     }
 
-    const { html, title, url } = results[0].result;
-    console.log('Extracted content:', { title, url, htmlLength: html.length });
+    const { markdown, title, url } = results[0].result;
 
-    // Send to native host
-    console.log('Sending message to native host...');
-    const response = await chrome.runtime.sendNativeMessage(
-      'com.markdownprinter.host',
-      {
-        command: 'save',
-        html: html,
-        title: title,
-        url: url,
-        saveDir: settings.savePath || '',
-        openAfterSave: settings.openAfterSave
-      }
-    );
-    console.log('Native host response:', response);
+    // Generate filename
+    const timestamp = new Date().toISOString().split('T')[0];
+    const sanitizedTitle = sanitizeFilename(title || 'untitled');
+    const filename = `${sanitizedTitle}-${timestamp}.md`;
 
-    if (response.success) {
-      console.log('Saved to:', response.filepath);
-      // Show notification
-      chrome.notifications.create({
-        type: 'basic',
-        iconUrl: chrome.runtime.getURL('icon48.png'),
-        title: 'Markdown Printer',
-        message: `Saved to: ${response.filepath}`
-      });
-    } else {
-      console.error('Save failed:', response.error);
-      chrome.notifications.create({
-        type: 'basic',
-        iconUrl: chrome.runtime.getURL('icon48.png'),
-        title: 'Markdown Printer Error',
-        message: `Failed to save: ${response.error}`
-      });
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    chrome.notifications.create({
-      type: 'basic',
-      iconUrl: chrome.runtime.getURL('icon48.png'),
-      title: 'Markdown Printer Error',
-      message: `Error: ${error.message}`
+    // Add metadata header
+    const content = `# ${title}\n\n**Source:** ${url}\n**Saved:** ${new Date().toISOString()}\n\n---\n\n${markdown}`;
+
+    // Convert to data URL (service workers don't have URL.createObjectURL)
+    const base64Content = btoa(unescape(encodeURIComponent(content)));
+    const dataUrl = `data:text/markdown;base64,${base64Content}`;
+
+    // Download the file
+    await chrome.downloads.download({
+      url: dataUrl,
+      filename: filename,
+      saveAs: true  // Show save dialog to let user choose location
     });
+
+  } catch (error) {
+    throw error;
   }
 }
 
 // This function runs in the page context
-function extractPageContent() {
+function extractAndConvertToMarkdown() {
   // Try to get the main content area, fall back to body
   const article = document.querySelector('article') ||
                   document.querySelector('[role="main"]') ||
                   document.querySelector('main') ||
                   document.body;
 
+  // Convert HTML to Markdown using Turndown
+  const turndownService = new TurndownService({
+    headingStyle: 'atx',
+    codeBlockStyle: 'fenced',
+    bulletListMarker: '-'
+  });
+
+  const markdown = turndownService.turndown(article.innerHTML);
+
   return {
-    html: article.innerHTML,
+    markdown: markdown,
     title: document.title,
     url: window.location.href
   };
+}
+
+function sanitizeFilename(filename) {
+  return filename
+    .replace(/[<>:"/\\|?*]/g, '-')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .substring(0, 200);
 }

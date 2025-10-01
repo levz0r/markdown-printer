@@ -12,26 +12,6 @@
       font-size: 18px;
       margin: 0 0 15px 0;
       color: #333;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .logo {
-      width: 32px;
-      height: 32px;
-    }
-    .copyright {
-      margin-top: 15px;
-      font-size: 10px;
-      color: #999;
-      text-align: center;
-    }
-    .copyright a {
-      color: #666;
-      text-decoration: underline;
-    }
-    .copyright a:hover {
-      color: #2196F3;
     }
     button {
       width: 100%;
@@ -50,35 +30,20 @@
     button:active {
       background: #3d8b40;
     }
-    button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-    }
     .info {
       margin-top: 15px;
       font-size: 12px;
       color: #666;
       line-height: 1.5;
     }
-    .badge {
-      display: inline-block;
-      background: #2196F3;
-      color: white;
-      padding: 2px 8px;
-      border-radius: 10px;
-      font-size: 10px;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
   </style>
 </head>
 <body>
-  <h1>
-    <img src="icon48.png" alt="MD" class="logo">
-    Markdown Printer
-  </h1>
+  <h1>Markdown Printer</h1>
   <button id="saveBtn">Save Page as Markdown</button>
-  <div class="copyright">© <a href="https://lev.engineer" target="_blank">Lev Gelfenbuim</a> 2025</div>
+  <div class="info" id="infoText">
+    Click to save the current page as a Markdown file in ~/MarkdownPrints/
+  </div>
   <script src="popup.js"></script>
 </body>
 </html>
