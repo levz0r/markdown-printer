@@ -4,6 +4,13 @@ set -e
 
 echo "Installing Markdown Printer..."
 
+# Check if running on Windows (Git Bash, WSL, etc.)
+if [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" || "$OSTYPE" == "cygwin" ]]; then
+  echo "Error: This script is for macOS and Linux."
+  echo "For Windows, please run install.bat instead."
+  exit 1
+fi
+
 # Get absolute paths
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 NATIVE_HOST_DIR="$SCRIPT_DIR/native-host"
@@ -14,11 +21,12 @@ echo "Installing Node.js dependencies..."
 cd "$NATIVE_HOST_DIR"
 npm install
 
-# Make host.js executable
+# Make scripts executable
 chmod +x host.js
+chmod +x host-wrapper.sh
 
-# Get the full path to host.js
-HOST_PATH="$NATIVE_HOST_DIR/host.js"
+# Get the full path to the wrapper script
+HOST_PATH="$NATIVE_HOST_DIR/host-wrapper.sh"
 
 # Create a temporary manifest with the correct path
 TEMP_MANIFEST=$(mktemp)

@@ -23,9 +23,32 @@ A Chrome extension that saves web pages as Markdown files with preserved formatt
 
 - Google Chrome
 - Node.js (v14 or higher)
-- macOS or Linux
+- **Platform**: Windows, macOS, or Linux
 
 ### Setup
+
+#### Windows
+
+1. Clone or download this repository
+
+2. Run the installation script:
+   ```cmd
+   install.bat
+   ```
+
+3. Load the Chrome extension:
+   - Open Chrome and navigate to `chrome://extensions/`
+   - Enable "Developer mode" in the top right
+   - Click "Load unpacked"
+   - Select the `extension/` directory
+
+4. Update the native messaging manifest:
+   - Copy the Extension ID from the Chrome extensions page
+   - Open the manifest file at:
+     `%LOCALAPPDATA%\Google\Chrome\NativeMessagingHosts\com.markdownprinter.host.json`
+   - Replace `EXTENSION_ID_PLACEHOLDER` with your actual extension ID
+
+#### macOS / Linux
 
 1. Clone or download this repository
 
@@ -43,8 +66,8 @@ A Chrome extension that saves web pages as Markdown files with preserved formatt
 4. Update the native messaging manifest:
    - Copy the Extension ID from the Chrome extensions page
    - Open the manifest file:
-     - macOS: `~/Library/Application Support/Google/Chrome/NativeMessagingHosts/com.markdownprinter.host.json`
-     - Linux: `~/.config/google-chrome/NativeMessagingHosts/com.markdownprinter.host.json`
+     - **macOS**: `~/Library/Application Support/Google/Chrome/NativeMessagingHosts/com.markdownprinter.host.json`
+     - **Linux**: `~/.config/google-chrome/NativeMessagingHosts/com.markdownprinter.host.json`
    - Replace `EXTENSION_ID_PLACEHOLDER` with your actual extension ID
 
 5. Reload the extension in Chrome
