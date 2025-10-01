@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Markdown Printer Settings</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 20px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .setting {
+      margin-bottom: 20px;
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 4px;
+    }
+    label {
+      display: block;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: #555;
+    }
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+    input[type="checkbox"] {
+      margin-right: 8px;
+      width: 18px;
+      height: 18px;
+      vertical-align: middle;
+    }
+    .checkbox-label {
+      display: inline-block;
+      vertical-align: middle;
+      font-weight: normal;
+      cursor: pointer;
+    }
+    .description {
+      font-size: 12px;
+      color: #666;
+      margin-top: 5px;
+    }
+    .button-container {
+      margin-top: 30px;
+      display: flex;
+      gap: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #saveBtn {
+      background: #4CAF50;
+      color: white;
+    }
+    #saveBtn:hover {
+      background: #45a049;
+    }
+    #resetBtn {
+      background: #f44336;
+      color: white;
+    }
+    #resetBtn:hover {
+      background: #da190b;
+    }
+    .status {
+      margin-top: 15px;
+      padding: 10px;
+      border-radius: 4px;
+      display: none;
+    }
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+  </style>
+</head>
+<body>
+  <h1>Markdown Printer Settings</h1>
+
+  <div class="setting">
+    <label for="savePath">Save Location</label>
+    <div style="display: flex; gap: 10px;">
+      <input type="text" id="savePath" placeholder="~/MarkdownPrints" style="flex: 1;">
+      <button id="browseBtn" style="padding: 8px 16px; white-space: nowrap;">Browse...</button>
+    </div>
+    <div class="description">
+      Full path where markdown files will be saved. Use ~ for home directory.
+      Leave empty to use default: ~/MarkdownPrints
+    </div>
+  </div>
+
+  <div class="setting">
+    <label>
+      <input type="checkbox" id="openAfterSave">
+      <span class="checkbox-label">Open file after saving</span>
+    </label>
+    <div class="description">
+      Automatically open the markdown file in your default editor after creation.
+    </div>
+  </div>
+
+  <div class="button-container">
+    <button id="saveBtn">Save Settings</button>
+    <button id="resetBtn">Reset to Defaults</button>
+  </div>
+
+  <div id="status" class="status"></div>
+
+  <script src="options.js"></script>
+</body>
+</html>

@@ -75,7 +75,47 @@ function sanitizeFilename(filename) {
     .substring(0, 200);
 }
 
-async function saveMarkdown(html, title, url, saveDir) {
+async function browseFolder() {
+  return new Promise((resolve) => {
+    const { exec } = require('child_process');
+
+    if (process.platform === 'darwin') {
+      // macOS - use osascript to show folder picker
+      const script = 'osascript -e "POSIX path of (choose folder with prompt \\"Select folder for markdown files:\\")"';
+      exec(script, (error, stdout, stderr) => {
+        if (error) {
+          if (error.code === 1) {
+            // User cancelled
+            resolve({ success: false, cancelled: true });
+          } else {
+            resolve({ success: false, error: stderr || error.message });
+          }
+        } else {
+          const path = stdout.trim();
+          resolve({ success: true, path });
+        }
+      });
+    } else if (process.platform === 'linux') {
+      // Linux - use zenity
+      exec('zenity --file-selection --directory --title="Select folder for markdown files"', (error, stdout, stderr) => {
+        if (error) {
+          if (error.code === 1) {
+            resolve({ success: false, cancelled: true });
+          } else {
+            resolve({ success: false, error: 'Please install zenity for folder selection' });
+          }
+        } else {
+          const path = stdout.trim();
+          resolve({ success: true, path });
+        }
+      });
+    } else {
+      resolve({ success: false, error: 'Folder selection not supported on this platform' });
+    }
+  });
+}
+
+async function saveMarkdown(html, title, url, saveDir, openAfterSave) {
   try {
     // Convert HTML to Markdown
     const turndownService = new TurndownService({
@@ -91,8 +131,12 @@ async function saveMarkdown(html, title, url, saveDir) {
     const sanitizedTitle = sanitizeFilename(title || 'untitled');
     const filename = `${sanitizedTitle}-${timestamp}.md`;
 
-    // Determine save location
-    const outputDir = saveDir || path.join(os.homedir(), 'MarkdownPrints');
+    // Determine save location (expand ~ if present)
+    let outputDir = saveDir || path.join(os.homedir(), 'MarkdownPrints');
+    if (outputDir.startsWith('~')) {
+      outputDir = path.join(os.homedir(), outputDir.slice(1));
+    }
+
     if (!fs.existsSync(outputDir)) {
       fs.mkdirSync(outputDir, { recursive: true });
     }
@@ -104,6 +148,14 @@ async function saveMarkdown(html, title, url, saveDir) {
 
     // Write file
     fs.writeFileSync(filepath, content, 'utf8');
+
+    // Open file if requested
+    if (openAfterSave) {
+      const { exec } = require('child_process');
+      const openCommand = process.platform === 'darwin' ? 'open' :
+                         process.platform === 'win32' ? 'start' : 'xdg-open';
+      exec(`${openCommand} "${filepath}"`);
+    }
 
     return { success: true, filepath };
   } catch (error) {
@@ -122,9 +174,13 @@ async function main() {
         message.html,
         message.title,
         message.url,
-        message.saveDir
+        message.saveDir,
+        message.openAfterSave
       );
       logError(`Save result: ${JSON.stringify(result)}`);
+      sendMessage(result);
+    } else if (message.command === 'browsefolder') {
+      const result = await browseFolder();
       sendMessage(result);
     } else {
       sendMessage({ success: false, error: 'Unknown command' });

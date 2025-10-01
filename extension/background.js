@@ -37,6 +37,13 @@ async function savePageAsMarkdown(tabId) {
   try {
     console.log('savePageAsMarkdown called for tab:', tabId);
 
+    // Load settings
+    const settings = await chrome.storage.sync.get({
+      savePath: '',
+      openAfterSave: false
+    });
+    console.log('Settings loaded:', settings);
+
     // Inject script to get page content
     const results = await chrome.scripting.executeScript({
       target: { tabId: tabId },
@@ -59,7 +66,9 @@ async function savePageAsMarkdown(tabId) {
         command: 'save',
         html: html,
         title: title,
-        url: url
+        url: url,
+        saveDir: settings.savePath || '',
+        openAfterSave: settings.openAfterSave
       }
     );
     console.log('Native host response:', response);
