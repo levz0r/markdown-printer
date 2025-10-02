@@ -15,7 +15,11 @@ Perfect for documentation, articles, and note-taking.
 
 ## 🎯 Installation
 
-### Quick Install (Recommended)
+### Chrome Web Store (Recommended)
+
+**[Install from Chrome Web Store](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf)** ⭐
+
+### Manual Installation (For Development)
 
 1. Clone or download this repository
 2. Open Chrome and navigate to `chrome://extensions/`
@@ -23,10 +27,6 @@ Perfect for documentation, articles, and note-taking.
 4. Click "Load unpacked"
 5. Select the `extension/` directory
 6. Done! 🎉
-
-### Chrome Web Store
-
-*Coming soon!*
 
 ## 📖 Usage
 
@@ -79,7 +79,7 @@ See [Pro Version README](extension-pro/README.md) for installation instructions.
 | Save location | Choose each time | Configurable default |
 | Auto-open files | ❌ | ✅ |
 | Settings | ❌ | ✅ |
-| Chrome Web Store | ✅ Ready | ❌ Can't publish |
+| Chrome Web Store | ✅ [Available](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf) | ❌ Can't publish |
 
 ## 🛠️ Technical Details
 
@@ -98,6 +98,7 @@ Contributions welcome! Feel free to open issues or submit pull requests.
 
 ## 🔗 Links
 
+- [Chrome Web Store](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf) - Install the extension
 - [GitHub Repository](https://github.com/levz0r/markdown-printer)
 - [Report Issues](https://github.com/levz0r/markdown-printer/issues)
 
