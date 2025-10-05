@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Markdown Printer",
+  "version": "1.0.0",
+  "description": "Save web pages as Markdown files to your Downloads folder. No setup required!",
+  "author": "Lev Gelfenbuim",
+  "homepage_url": "https://github.com/levz0r/markdown-printer",
+  "permissions": ["activeTab", "contextMenus", "downloads", "scripting"],
+  "background": {
+    "scripts": ["background.js"]
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "markdown-printer@lev.engineer",
+      "strict_min_version": "121.0"
+    }
+  }
+}

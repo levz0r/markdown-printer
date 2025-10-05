@@ -1,0 +1,20 @@
+{
+  "name": "markdown-printer",
+  "version": "1.0.0",
+  "description": "Save web pages as Markdown files with preserved formatting",
+  "scripts": {
+    "build": "node build.js",
+    "build:chrome": "node build.js chrome",
+    "build:firefox": "node build.js firefox",
+    "version:patch": "npm version patch && npm run build",
+    "version:minor": "npm version minor && npm run build",
+    "version:major": "npm version major && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/levz0r/markdown-printer.git"
+  },
+  "author": "Lev Gelfenbuim",
+  "license": "MIT",
+  "devDependencies": {}
+}

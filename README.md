@@ -15,17 +15,30 @@ Perfect for documentation, articles, and note-taking.
 
 ## 🎯 Installation
 
-### Chrome Web Store (Recommended)
+### Chrome/Edge (Recommended)
 
 **[Install from Chrome Web Store](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf)** ⭐
 
+### Firefox
+
+Coming soon to Firefox Add-ons! For now, use manual installation below.
+
 ### Manual Installation (For Development)
 
+#### Chrome/Edge:
 1. Clone or download this repository
-2. Open Chrome and navigate to `chrome://extensions/`
+2. Open Chrome/Edge and navigate to `chrome://extensions/` or `edge://extensions/`
 3. Enable "Developer mode" in the top right
 4. Click "Load unpacked"
-5. Select the `extension/` directory
+5. Select the `extension-chrome/` directory
+6. Done! 🎉
+
+#### Firefox:
+1. Clone or download this repository
+2. Open Firefox and navigate to `about:debugging`
+3. Click "This Firefox" in the left sidebar
+4. Click "Load Temporary Add-on"
+5. Navigate to the `extension-firefox/` directory and select `manifest.json`
 6. Done! 🎉
 
 ## 📖 Usage
@@ -76,10 +89,12 @@ See [Pro Version README](extension-pro/README.md) for installation instructions.
 | Feature | Standard | Pro |
 |---------|----------|-----|
 | Installation | One-click | Requires setup script |
+| Browser Support | Chrome, Edge, Firefox | Chrome, Edge, Firefox |
 | Save location | Choose each time | Configurable default |
 | Auto-open files | ❌ | ✅ |
 | Settings | ❌ | ✅ |
 | Chrome Web Store | ✅ [Available](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf) | ❌ Can't publish |
+| Firefox Add-ons | 🔜 Coming soon | ❌ Can't publish |
 
 ## 🛠️ Technical Details
 
@@ -87,6 +102,8 @@ See [Pro Version README](extension-pro/README.md) for installation instructions.
 - **Conversion:** Turndown.js (client-side)
 - **Permissions:** activeTab, downloads, scripting, contextMenus
 - **File Format:** Markdown (.md)
+- **Browser Support:** Chrome, Edge, Firefox (121+)
+- **Cross-browser:** Separate builds for Chrome and Firefox due to Manifest V3 differences
 
 ## 📝 License
 
