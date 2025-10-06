@@ -47,6 +47,19 @@ Found a bug or have a suggestion? Report it on GitHub or email hi@lev.engineer
 
 ## Version History
 
+### v1.0.3 (2025-10-06)
+
+• Fixed content extraction to work reliably across all site layouts
+• Improved capture of complex documentation sites (Microsoft Learn, etc.)
+• Simplified content selection for better compatibility
+
+### v1.0.2 (2025-10-06)
+
+• Added full-page capture with automatic scrolling
+• Automatically loads lazy-loaded content before conversion
+• Scrolls through entire page to trigger dynamic content
+• 3x faster scrolling performance
+
 ### v1.0.1 (2025-10-05)
 
 • Added Firefox support with cross-browser compatibility
