@@ -120,7 +120,51 @@ async function savePageAsMarkdown(tabId) {
 }
 
 // This function runs in the page context
-function extractAndConvertToMarkdown() {
+async function extractAndConvertToMarkdown() {
+  // Function to scroll through the entire page to trigger lazy loading
+  async function scrollToBottom() {
+    // Start from the top
+    window.scrollTo(0, 0);
+    await new Promise(resolve => setTimeout(resolve, 100));
+
+    let lastHeight = document.documentElement.scrollHeight;
+    let scrollAttempts = 0;
+    const maxScrollAttempts = 50; // Prevent infinite loops
+
+    // Scroll down in increments
+    const scrollStep = window.innerHeight;
+    let currentPosition = 0;
+
+    while (scrollAttempts < maxScrollAttempts) {
+      // Scroll to current position
+      window.scrollTo(0, currentPosition);
+
+      // Wait for content to load (faster)
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      const newHeight = document.documentElement.scrollHeight;
+
+      // If we've reached the bottom and height hasn't changed, we're done
+      if (currentPosition >= newHeight && newHeight === lastHeight) {
+        break;
+      }
+
+      // Update tracking variables
+      lastHeight = newHeight;
+      currentPosition += scrollStep;
+      scrollAttempts++;
+    }
+
+    // Scroll back to top
+    window.scrollTo(0, 0);
+
+    // Final wait for any remaining content
+    await new Promise(resolve => setTimeout(resolve, 500));
+  }
+
+  // Scroll through the page first
+  await scrollToBottom();
+
   // Try to get the main content area, fall back to body
   const article = document.querySelector('article') ||
                   document.querySelector('[role="main"]') ||
@@ -137,7 +181,11 @@ function extractAndConvertToMarkdown() {
   // Remove unwanted elements (scripts, styles, etc.)
   turndownService.remove(['script', 'style', 'noscript', 'iframe', 'svg']);
 
-  const markdown = turndownService.turndown(article.innerHTML);
+  // Clone the element to avoid modifying the actual page
+  const clonedArticle = article.cloneNode(true);
+
+  // Get the full HTML after scrolling has loaded everything
+  const markdown = turndownService.turndown(clonedArticle);
 
   return {
     markdown: markdown,
