@@ -1,6 +1,6 @@
 {
   "name": "markdown-printer",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Save web pages as Markdown files with preserved formatting",
   "scripts": {
     "build": "node build.js",
