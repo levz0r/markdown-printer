@@ -165,11 +165,8 @@ async function extractAndConvertToMarkdown() {
   // Scroll through the page first
   await scrollToBottom();
 
-  // Try to get the main content area, fall back to body
-  const article = document.querySelector('article') ||
-                  document.querySelector('[role="main"]') ||
-                  document.querySelector('main') ||
-                  document.body;
+  // Use body to capture all content
+  const article = document.body;
 
   // Convert HTML to Markdown using Turndown
   const turndownService = new TurndownService({
