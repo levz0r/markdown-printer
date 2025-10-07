@@ -15,9 +15,13 @@ Perfect for documentation, articles, and note-taking.
 
 ## 🎯 Installation
 
-### Chrome/Edge (Recommended)
+### Chrome
 
 **[Install from Chrome Web Store](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf)** ⭐
+
+### Edge
+
+**[Install from Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/mlmakmhfnkbabnhhcnekleemamhpnmgk)** ⭐
 
 ### Firefox
 
@@ -94,6 +98,7 @@ See [Pro Version README](extension-pro/README.md) for installation instructions.
 | Auto-open files | ❌ | ✅ |
 | Settings | ❌ | ✅ |
 | Chrome Web Store | ✅ [Available](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf) | ❌ Can't publish |
+| Edge Add-ons | ✅ [Available](https://microsoftedge.microsoft.com/addons/detail/mlmakmhfnkbabnhhcnekleemamhpnmgk) | ❌ Can't publish |
 | Firefox Add-ons | 🔜 Coming soon | ❌ Can't publish |
 
 ## 🛠️ Technical Details
@@ -115,7 +120,8 @@ Contributions welcome! Feel free to open issues or submit pull requests.
 
 ## 🔗 Links
 
-- [Chrome Web Store](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf) - Install the extension
+- [Chrome Web Store](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf) - Install for Chrome
+- [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/mlmakmhfnkbabnhhcnekleemamhpnmgk) - Install for Edge
 - [GitHub Repository](https://github.com/levz0r/markdown-printer)
 - [Report Issues](https://github.com/levz0r/markdown-printer/issues)
 
