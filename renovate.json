@@ -1,0 +1,21 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended"
+  ],
+  "packageRules": [
+    {
+      "groupName": "non-major dependencies",
+      "matchUpdateTypes": ["minor", "patch", "digest", "pin"],
+      "automerge": false
+    },
+    {
+      "groupName": "major dependencies",
+      "matchUpdateTypes": ["major"],
+      "automerge": false
+    }
+  ],
+  "schedule": ["before 3am on Monday"],
+  "labels": ["dependencies"],
+  "dependencyDashboard": true
+}
