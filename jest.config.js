@@ -4,7 +4,6 @@ module.exports = {
   coverageDirectory: 'coverage',
   collectCoverageFrom: [
     'utils.js',
-    'build.js',
     '!**/node_modules/**',
     '!**/dist/**',
     '!**/test/**',
