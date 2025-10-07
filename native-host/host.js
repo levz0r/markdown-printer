@@ -76,12 +76,13 @@ function sanitizeFilename(filename) {
 }
 
 async function browseFolder() {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const { exec } = require('child_process');
 
     if (process.platform === 'darwin') {
       // macOS - use osascript to show folder picker
-      const script = 'osascript -e "POSIX path of (choose folder with prompt \\"Select folder for markdown files:\\")"';
+      const script =
+        'osascript -e "POSIX path of (choose folder with prompt \\"Select folder for markdown files:\\")"';
       exec(script, (error, stdout, stderr) => {
         if (error) {
           if (error.code === 1) {
@@ -97,18 +98,21 @@ async function browseFolder() {
       });
     } else if (process.platform === 'linux') {
       // Linux - use zenity
-      exec('zenity --file-selection --directory --title="Select folder for markdown files"', (error, stdout, stderr) => {
-        if (error) {
-          if (error.code === 1) {
-            resolve({ success: false, cancelled: true });
+      exec(
+        'zenity --file-selection --directory --title="Select folder for markdown files"',
+        (error, stdout, stderr) => {
+          if (error) {
+            if (error.code === 1) {
+              resolve({ success: false, cancelled: true });
+            } else {
+              resolve({ success: false, error: 'Please install zenity for folder selection' });
+            }
           } else {
-            resolve({ success: false, error: 'Please install zenity for folder selection' });
+            const path = stdout.trim();
+            resolve({ success: true, path });
           }
-        } else {
-          const path = stdout.trim();
-          resolve({ success: true, path });
         }
-      });
+      );
     } else {
       resolve({ success: false, error: 'Folder selection not supported on this platform' });
     }
@@ -121,7 +125,7 @@ async function saveMarkdown(html, title, url, saveDir, openAfterSave) {
     const turndownService = new TurndownService({
       headingStyle: 'atx',
       codeBlockStyle: 'fenced',
-      bulletListMarker: '-'
+      bulletListMarker: '-',
     });
 
     const markdown = turndownService.turndown(html);
@@ -152,8 +156,12 @@ async function saveMarkdown(html, title, url, saveDir, openAfterSave) {
     // Open file if requested
     if (openAfterSave) {
       const { exec } = require('child_process');
-      const openCommand = process.platform === 'darwin' ? 'open' :
-                         process.platform === 'win32' ? 'start' : 'xdg-open';
+      const openCommand =
+        process.platform === 'darwin'
+          ? 'open'
+          : process.platform === 'win32'
+            ? 'start'
+            : 'xdg-open';
       exec(`${openCommand} "${filepath}"`);
     }
 

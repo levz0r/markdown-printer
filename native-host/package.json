@@ -6,7 +6,11 @@
   "scripts": {
     "test": "node host.js"
   },
-  "keywords": ["chrome", "native-messaging", "markdown"],
+  "keywords": [
+    "chrome",
+    "native-messaging",
+    "markdown"
+  ],
   "author": "",
   "license": "MIT",
   "dependencies": {

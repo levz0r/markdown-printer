@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   try {
     const settings = await chrome.storage.sync.get({
       savePath: '',
-      openAfterSave: false
+      openAfterSave: false,
     });
 
     const savePath = settings.savePath || '~/MarkdownPrints/';

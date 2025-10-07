@@ -1,7 +1,7 @@
 // Default settings
 const DEFAULT_SETTINGS = {
   savePath: '',
-  openAfterSave: false
+  openAfterSave: false,
 };
 
 // Load settings when page opens
@@ -14,10 +14,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Browse for folder
 document.getElementById('browseBtn').addEventListener('click', async () => {
   try {
-    const response = await chrome.runtime.sendNativeMessage(
-      'com.markdownprinter.host',
-      { command: 'browsefolder' }
-    );
+    const response = await chrome.runtime.sendNativeMessage('com.markdownprinter.host', {
+      command: 'browsefolder',
+    });
 
     if (response.success && response.path) {
       document.getElementById('savePath').value = response.path;
@@ -33,7 +32,7 @@ document.getElementById('browseBtn').addEventListener('click', async () => {
 document.getElementById('saveBtn').addEventListener('click', async () => {
   const settings = {
     savePath: document.getElementById('savePath').value.trim(),
-    openAfterSave: document.getElementById('openAfterSave').checked
+    openAfterSave: document.getElementById('openAfterSave').checked,
   };
 
   try {

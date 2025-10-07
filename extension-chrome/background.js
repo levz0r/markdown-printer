@@ -6,7 +6,7 @@ browserAPI.runtime.onInstalled.addListener(() => {
   browserAPI.contextMenus.create({
     id: 'saveAsMarkdown',
     title: 'Save as Markdown',
-    contexts: ['page']
+    contexts: ['page'],
   });
 });
 
@@ -20,7 +20,7 @@ browserAPI.contextMenus.onClicked.addListener((info, tab) => {
 // Handle messages from popup
 browserAPI.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'saveAsMarkdown') {
-    browserAPI.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
+    browserAPI.tabs.query({ active: true, currentWindow: true }, async tabs => {
       if (tabs[0]) {
         try {
           await savePageAsMarkdown(tabs[0].id);
@@ -37,23 +37,29 @@ browserAPI.runtime.onMessage.addListener((request, sender, sendResponse) => {
 async function savePageAsMarkdown(tabId) {
   try {
     // Inject Turndown library and conversion script
-    await browserAPI.scripting.executeScript({
-      target: { tabId: tabId },
-      files: ['turndown.js']
-    }).catch(error => {
-      // Better error message for protected pages
-      if (error.message.includes('cannot be scripted') ||
+    await browserAPI.scripting
+      .executeScript({
+        target: { tabId: tabId },
+        files: ['turndown.js'],
+      })
+      .catch(error => {
+        // Better error message for protected pages
+        if (
+          error.message.includes('cannot be scripted') ||
           error.message.includes('Cannot access') ||
-          error.message.includes('extensions gallery')) {
-        throw new Error('Cannot save this page - extensions are blocked on browser internal pages and extension stores');
-      }
-      throw error;
-    });
+          error.message.includes('extensions gallery')
+        ) {
+          throw new Error(
+            'Cannot save this page - extensions are blocked on browser internal pages and extension stores'
+          );
+        }
+        throw error;
+      });
 
     // Inject script to convert and get markdown
     const results = await browserAPI.scripting.executeScript({
       target: { tabId: tabId },
-      func: extractAndConvertToMarkdown
+      func: extractAndConvertToMarkdown,
     });
 
     if (!results || !results[0]) {
@@ -76,11 +82,9 @@ async function savePageAsMarkdown(tabId) {
 
     if (isFirefox) {
       // Firefox: Use blob URL approach with special handling
-      const blob = new Blob([content], { type: 'text/plain' });
-
       // Create a temporary object URL in a way that works in Firefox background scripts
       // We'll inject a helper script into the page to create the blob URL
-      const [result] = await browserAPI.scripting.executeScript({
+      await browserAPI.scripting.executeScript({
         target: { tabId: tabId },
         func: (content, filename) => {
           const blob = new Blob([content], { type: 'text/plain' });
@@ -93,7 +97,7 @@ async function savePageAsMarkdown(tabId) {
           URL.revokeObjectURL(url);
           return true;
         },
-        args: [content, filename]
+        args: [content, filename],
       });
     } else {
       // Chrome: Use data URL
@@ -109,10 +113,9 @@ async function savePageAsMarkdown(tabId) {
       await browserAPI.downloads.download({
         url: dataUrl,
         filename: filename,
-        saveAs: true
+        saveAs: true,
       });
     }
-
   } catch (error) {
     console.error('Error saving markdown:', error);
     throw error;
@@ -172,7 +175,7 @@ async function extractAndConvertToMarkdown() {
   const turndownService = new TurndownService({
     headingStyle: 'atx',
     codeBlockStyle: 'fenced',
-    bulletListMarker: '-'
+    bulletListMarker: '-',
   });
 
   // Remove unwanted elements (scripts, styles, etc.)
@@ -187,7 +190,7 @@ async function extractAndConvertToMarkdown() {
   return {
     markdown: markdown,
     title: document.title,
-    url: window.location.href
+    url: window.location.href,
   };
 }
 
