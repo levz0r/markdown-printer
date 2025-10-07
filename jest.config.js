@@ -2,12 +2,7 @@ module.exports = {
   testEnvironment: 'node',
   testMatch: ['**/test/**/*.test.js'],
   coverageDirectory: 'coverage',
-  collectCoverageFrom: [
-    'utils.js',
-    '!**/node_modules/**',
-    '!**/dist/**',
-    '!**/test/**',
-  ],
+  collectCoverageFrom: ['utils.js', '!**/node_modules/**', '!**/dist/**', '!**/test/**'],
   coverageThreshold: {
     global: {
       statements: 80,
