@@ -8,7 +8,14 @@
     "build:firefox": "node build.js firefox",
     "version:patch": "npm version patch && npm run build",
     "version:minor": "npm version minor && npm run build",
-    "version:major": "npm version major && npm run build"
+    "version:major": "npm version major && npm run build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "repository": {
     "type": "git",
@@ -16,5 +23,10 @@
   },
   "author": "Lev Gelfenbuim",
   "license": "MIT",
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "eslint": "^9.37.0",
+    "jest": "^30.2.0",
+    "prettier": "^3.6.2"
+  }
 }
