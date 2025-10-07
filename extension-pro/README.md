@@ -28,6 +28,7 @@ Advanced version with custom save locations, auto-open files, and persistent set
 1. Clone or download this repository
 
 2. Run the installation script:
+
    ```cmd
    install.bat
    ```
@@ -49,6 +50,7 @@ Advanced version with custom save locations, auto-open files, and persistent set
 1. Clone or download this repository
 
 2. Run the installation script:
+
    ```bash
    ./install.sh
    ```

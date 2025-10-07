@@ -42,6 +42,7 @@ If we make changes to this privacy policy, we will update the "Last Updated" dat
 ## Contact
 
 If you have questions about this privacy policy, please contact:
+
 - Email: lev@lev.engineer
 - GitHub: https://github.com/levz0r/markdown-printer
 

@@ -21,12 +21,14 @@ This extension uses the following open-source library:
 ## Build Steps
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/levz0r/markdown-printer.git
    cd markdown-printer
    ```
 
 2. **Run the build script**
+
    ```bash
    npm run build:firefox
    ```
@@ -40,6 +42,7 @@ This extension uses the following open-source library:
 3. **Verify the build**
 
    The output package will be located at:
+
    ```
    dist/markdown-printer-firefox-v{version}.zip
    ```

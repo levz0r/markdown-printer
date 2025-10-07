@@ -10,7 +10,7 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
       button.textContent = 'Save Page as Markdown';
       button.disabled = false;
     }, 1500);
-  } catch (error) {
+  } catch (_error) {
     button.textContent = 'Error - Try again';
     button.disabled = false;
     setTimeout(() => {

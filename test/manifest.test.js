@@ -13,9 +13,7 @@ describe('Manifest Validation', () => {
     firefoxManifest = JSON.parse(
       fs.readFileSync(path.join(__dirname, '../extension-firefox/manifest.json'), 'utf8')
     );
-    packageJson = JSON.parse(
-      fs.readFileSync(path.join(__dirname, '../package.json'), 'utf8')
-    );
+    packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf8'));
   });
 
   describe('Version Consistency', () => {
@@ -54,7 +52,7 @@ describe('Manifest Validation', () => {
         'activeTab',
         'contextMenus',
         'downloads',
-        'scripting'
+        'scripting',
       ]);
     });
 
@@ -118,7 +116,9 @@ describe('Manifest Validation', () => {
     });
 
     test('has extension ID', () => {
-      expect(firefoxManifest.browser_specific_settings.gecko.id).toBe('markdown-printer@lev.engineer');
+      expect(firefoxManifest.browser_specific_settings.gecko.id).toBe(
+        'markdown-printer@lev.engineer'
+      );
     });
 
     test('has minimum Firefox version', () => {
@@ -127,7 +127,7 @@ describe('Manifest Validation', () => {
 
     test('has data collection permissions', () => {
       expect(firefoxManifest.browser_specific_settings.gecko.data_collection_permissions).toEqual({
-        required: ['none']
+        required: ['none'],
       });
     });
   });
@@ -143,7 +143,7 @@ describe('Manifest Validation', () => {
         'turndown.js',
         'icon16.png',
         'icon48.png',
-        'icon128.png'
+        'icon128.png',
       ];
 
       requiredFiles.forEach(file => {
@@ -161,7 +161,7 @@ describe('Manifest Validation', () => {
         'turndown.js',
         'icon16.png',
         'icon48.png',
-        'icon128.png'
+        'icon128.png',
       ];
 
       requiredFiles.forEach(file => {

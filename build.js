@@ -23,55 +23,50 @@ const commonFiles = [
   'turndown.js',
   'icon16.png',
   'icon48.png',
-  'icon128.png'
+  'icon128.png',
 ];
 
 // Manifest templates
 const chromeManifest = {
   manifest_version: 3,
-  name: "Markdown Printer",
+  name: 'Markdown Printer',
   version: version,
-  description: "Save web pages as Markdown files to your Downloads folder. No setup required!",
-  author: "Lev Gelfenbuim",
-  homepage_url: "https://github.com/levz0r/markdown-printer",
-  permissions: [
-    "activeTab",
-    "contextMenus",
-    "downloads",
-    "scripting"
-  ],
+  description: 'Save web pages as Markdown files to your Downloads folder. No setup required!',
+  author: 'Lev Gelfenbuim',
+  homepage_url: 'https://github.com/levz0r/markdown-printer',
+  permissions: ['activeTab', 'contextMenus', 'downloads', 'scripting'],
   background: {
-    service_worker: "background.js"
+    service_worker: 'background.js',
   },
   icons: {
-    "16": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
+    16: 'icon16.png',
+    48: 'icon48.png',
+    128: 'icon128.png',
   },
   action: {
-    default_popup: "popup.html",
+    default_popup: 'popup.html',
     default_icon: {
-      "16": "icon16.png",
-      "48": "icon48.png",
-      "128": "icon128.png"
-    }
-  }
+      16: 'icon16.png',
+      48: 'icon48.png',
+      128: 'icon128.png',
+    },
+  },
 };
 
 const firefoxManifest = {
   ...chromeManifest,
   browser_specific_settings: {
     gecko: {
-      id: "markdown-printer@lev.engineer",
-      strict_min_version: "121.0",
+      id: 'markdown-printer@lev.engineer',
+      strict_min_version: '121.0',
       data_collection_permissions: {
-        required: ["none"]
-      }
-    }
+        required: ['none'],
+      },
+    },
   },
   background: {
-    scripts: ["background.js"]
-  }
+    scripts: ['background.js'],
+  },
 };
 
 // Function to ensure directory exists
@@ -120,10 +115,7 @@ if (buildChrome) {
   }
 
   // Write manifest
-  fs.writeFileSync(
-    path.join(chromeDir, 'manifest.json'),
-    JSON.stringify(chromeManifest, null, 2)
-  );
+  fs.writeFileSync(path.join(chromeDir, 'manifest.json'), JSON.stringify(chromeManifest, null, 2));
   console.log('  ✓ Updated manifest.json');
 
   // Create dist directory
@@ -162,8 +154,12 @@ if (buildFirefox) {
 console.log('\n✅ Build complete!\n');
 console.log('📦 Packages created in dist/ directory');
 console.log(`   Version: ${version}`);
-if (buildChrome) console.log(`   - markdown-printer-chrome-v${version}.zip`);
-if (buildFirefox) console.log(`   - markdown-printer-firefox-v${version}.zip`);
+if (buildChrome) {
+  console.log(`   - markdown-printer-chrome-v${version}.zip`);
+}
+if (buildFirefox) {
+  console.log(`   - markdown-printer-firefox-v${version}.zip`);
+}
 console.log('\nTo bump version and rebuild:');
 console.log('  npm run version:patch   # 1.0.0 -> 1.0.1');
 console.log('  npm run version:minor   # 1.0.0 -> 1.1.0');

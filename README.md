@@ -30,6 +30,7 @@ Coming soon to Firefox Add-ons! For now, use manual installation below.
 ### Manual Installation (For Development)
 
 #### Chrome/Edge:
+
 1. Clone or download this repository
 2. Open Chrome/Edge and navigate to `chrome://extensions/` or `edge://extensions/`
 3. Enable "Developer mode" in the top right
@@ -38,6 +39,7 @@ Coming soon to Firefox Add-ons! For now, use manual installation below.
 6. Done! 🎉
 
 #### Firefox:
+
 1. Clone or download this repository
 2. Open Firefox and navigate to `about:debugging`
 3. Click "This Firefox" in the left sidebar
@@ -48,12 +50,14 @@ Coming soon to Firefox Add-ons! For now, use manual installation below.
 ## 📖 Usage
 
 ### Method 1: Right-Click Menu
+
 1. Navigate to any webpage
 2. Right-click anywhere on the page
 3. Select "Save as Markdown"
 4. Choose where to save in the dialog
 
 ### Method 2: Extension Icon
+
 1. Navigate to any webpage
 2. Click the Markdown Printer icon in the toolbar
 3. Click "Save Page as Markdown"
@@ -64,6 +68,7 @@ Coming soon to Firefox Add-ons! For now, use manual installation below.
 Files are saved with the format: `Page-Title-YYYY-MM-DD.md`
 
 Example:
+
 ```markdown
 # Getting Started Guide
 
@@ -90,16 +95,16 @@ See [Pro Version README](extension-pro/README.md) for installation instructions.
 
 ## 🆚 Comparison
 
-| Feature | Standard | Pro |
-|---------|----------|-----|
-| Installation | One-click | Requires setup script |
-| Browser Support | Chrome, Edge, Firefox | Chrome, Edge, Firefox |
-| Save location | Choose each time | Configurable default |
-| Auto-open files | ❌ | ✅ |
-| Settings | ❌ | ✅ |
-| Chrome Web Store | ✅ [Available](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf) | ❌ Can't publish |
-| Edge Add-ons | ✅ [Available](https://microsoftedge.microsoft.com/addons/detail/mlmakmhfnkbabnhhcnekleemamhpnmgk) | ❌ Can't publish |
-| Firefox Add-ons | 🔜 Coming soon | ❌ Can't publish |
+| Feature          | Standard                                                                                                   | Pro                   |
+| ---------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
+| Installation     | One-click                                                                                                  | Requires setup script |
+| Browser Support  | Chrome, Edge, Firefox                                                                                      | Chrome, Edge, Firefox |
+| Save location    | Choose each time                                                                                           | Configurable default  |
+| Auto-open files  | ❌                                                                                                         | ✅                    |
+| Settings         | ❌                                                                                                         | ✅                    |
+| Chrome Web Store | ✅ [Available](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf) | ❌ Can't publish      |
+| Edge Add-ons     | ✅ [Available](https://microsoftedge.microsoft.com/addons/detail/mlmakmhfnkbabnhhcnekleemamhpnmgk)         | ❌ Can't publish      |
+| Firefox Add-ons  | 🔜 Coming soon                                                                                             | ❌ Can't publish      |
 
 ## 🛠️ Technical Details
 

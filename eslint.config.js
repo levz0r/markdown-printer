@@ -1,5 +1,18 @@
 module.exports = [
   {
+    ignores: [
+      'node_modules/**',
+      'dist/**',
+      'coverage/**',
+      'pnpm-lock.yaml',
+      '**/*.zip',
+      '**/.DS_Store',
+      '**/turndown.js',
+      'native-host/**',
+      'extension-pro/**',
+    ],
+  },
+  {
     files: ['**/*.js'],
     languageOptions: {
       ecmaVersion: 2021,
@@ -12,6 +25,9 @@ module.exports = [
         URL: 'readonly',
         Blob: 'readonly',
         FileReader: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        Promise: 'readonly',
         // Web Extension APIs
         chrome: 'readonly',
         browser: 'readonly',
@@ -19,7 +35,7 @@ module.exports = [
       },
     },
     rules: {
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'no-unused-vars': ['error', { argsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }],
       'no-console': 'off', // Console is used for debugging in extensions
       'no-undef': 'error',
       'prefer-const': 'error',
@@ -48,7 +64,7 @@ module.exports = [
     },
   },
   {
-    files: ['build.js', 'utils.js', 'test/**/*.js'],
+    files: ['build.js', 'utils.js', 'test/**/*.js', 'eslint.config.js', 'jest.config.js'],
     languageOptions: {
       globals: {
         // Node.js globals
@@ -56,6 +72,7 @@ module.exports = [
         module: 'readonly',
         __dirname: 'readonly',
         process: 'readonly',
+        exports: 'readonly',
       },
     },
   },

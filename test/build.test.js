@@ -4,9 +4,7 @@ const { execSync } = require('child_process');
 
 describe('Build Validation', () => {
   const distDir = path.join(__dirname, '../dist');
-  const packageJson = JSON.parse(
-    fs.readFileSync(path.join(__dirname, '../package.json'), 'utf8')
-  );
+  const packageJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json'), 'utf8'));
   const version = packageJson.version;
 
   // Run build before tests

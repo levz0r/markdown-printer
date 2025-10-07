@@ -4,7 +4,7 @@ chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: 'saveAsMarkdown',
     title: 'Save as Markdown',
-    contexts: ['page']
+    contexts: ['page'],
   });
 });
 
@@ -19,7 +19,7 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
 // Handle messages from popup
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'saveAsMarkdown') {
-    chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, async tabs => {
       if (tabs[0]) {
         try {
           await savePageAsMarkdown(tabs[0].id);
@@ -40,14 +40,14 @@ async function savePageAsMarkdown(tabId) {
     // Load settings
     const settings = await chrome.storage.sync.get({
       savePath: '',
-      openAfterSave: false
+      openAfterSave: false,
     });
     console.log('Settings loaded:', settings);
 
     // Inject script to get page content
     const results = await chrome.scripting.executeScript({
       target: { tabId: tabId },
-      func: extractPageContent
+      func: extractPageContent,
     });
 
     if (!results || !results[0]) {
@@ -60,17 +60,14 @@ async function savePageAsMarkdown(tabId) {
 
     // Send to native host
     console.log('Sending message to native host...');
-    const response = await chrome.runtime.sendNativeMessage(
-      'com.markdownprinter.host',
-      {
-        command: 'save',
-        html: html,
-        title: title,
-        url: url,
-        saveDir: settings.savePath || '',
-        openAfterSave: settings.openAfterSave
-      }
-    );
+    const response = await chrome.runtime.sendNativeMessage('com.markdownprinter.host', {
+      command: 'save',
+      html: html,
+      title: title,
+      url: url,
+      saveDir: settings.savePath || '',
+      openAfterSave: settings.openAfterSave,
+    });
     console.log('Native host response:', response);
 
     if (response.success) {
@@ -80,7 +77,7 @@ async function savePageAsMarkdown(tabId) {
         type: 'basic',
         iconUrl: chrome.runtime.getURL('icon48.png'),
         title: 'Markdown Printer',
-        message: `Saved to: ${response.filepath}`
+        message: `Saved to: ${response.filepath}`,
       });
     } else {
       console.error('Save failed:', response.error);
@@ -88,7 +85,7 @@ async function savePageAsMarkdown(tabId) {
         type: 'basic',
         iconUrl: chrome.runtime.getURL('icon48.png'),
         title: 'Markdown Printer Error',
-        message: `Failed to save: ${response.error}`
+        message: `Failed to save: ${response.error}`,
       });
     }
   } catch (error) {
@@ -97,7 +94,7 @@ async function savePageAsMarkdown(tabId) {
       type: 'basic',
       iconUrl: chrome.runtime.getURL('icon48.png'),
       title: 'Markdown Printer Error',
-      message: `Error: ${error.message}`
+      message: `Error: ${error.message}`,
     });
   }
 }
@@ -105,14 +102,15 @@ async function savePageAsMarkdown(tabId) {
 // This function runs in the page context
 function extractPageContent() {
   // Try to get the main content area, fall back to body
-  const article = document.querySelector('article') ||
-                  document.querySelector('[role="main"]') ||
-                  document.querySelector('main') ||
-                  document.body;
+  const article =
+    document.querySelector('article') ||
+    document.querySelector('[role="main"]') ||
+    document.querySelector('main') ||
+    document.body;
 
   return {
     html: article.innerHTML,
     title: document.title,
-    url: window.location.href
+    url: window.location.href,
   };
 }
