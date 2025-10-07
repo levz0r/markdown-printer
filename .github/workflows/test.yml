@@ -39,7 +39,7 @@ jobs:
         run: pnpm run format:check
 
       - name: Run tests
-        run: pnpm run test
+        run: pnpm run test:coverage
 
       - name: Run build
         run: pnpm run build
@@ -49,4 +49,5 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           files: ./coverage/lcov.info
+          token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: false
