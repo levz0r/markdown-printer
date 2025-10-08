@@ -115,12 +115,12 @@ jobs:
         env:
           EDGE_PRODUCT_ID: ${{ vars.EDGE_PRODUCT_ID }}
           EDGE_CLIENT_ID: ${{ vars.EDGE_CLIENT_ID }}
-          EDGE_CLIENT_SECRET: ${{ secrets.EDGE_CLIENT_SECRET }}
+          EDGE_API_KEY: ${{ secrets.EDGE_API_KEY }}
         run: |
           # Get access token
           TOKEN_RESPONSE=$(curl -s -X POST "https://login.microsoftonline.com/5c9eedce-81bc-42f3-8823-48ba6258b391/oauth2/v2.0/token" \
             -H "Content-Type: application/x-www-form-urlencoded" \
-            -d "client_id=$EDGE_CLIENT_ID&scope=https://api.addons.microsoftedge.microsoft.com/.default&client_secret=$EDGE_CLIENT_SECRET&grant_type=client_credentials")
+            -d "client_id=$EDGE_CLIENT_ID&scope=https://api.addons.microsoftedge.microsoft.com/.default&client_secret=$EDGE_API_KEY&grant_type=client_credentials")
           ACCESS_TOKEN=$(echo $TOKEN_RESPONSE | jq -r '.access_token')
 
           # Get current version
@@ -145,7 +145,7 @@ jobs:
             --edge-zip edge-extension.zip \
             --edge-product-id "${{ vars.EDGE_PRODUCT_ID }}" \
             --edge-client-id "${{ vars.EDGE_CLIENT_ID }}" \
-            --edge-client-secret "${{ secrets.EDGE_CLIENT_SECRET }}" \
+            --edge-api-key "${{ secrets.EDGE_API_KEY }}" \
             --edge-skip-submit-review
 
       - name: Skip Edge publish

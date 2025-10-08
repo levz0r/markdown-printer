@@ -50,7 +50,7 @@ Add these secrets to your repository at `Settings > Secrets and variables > Acti
 3. Click **Create API credentials**:
    - `EDGE_PRODUCT_ID` (from your extension overview page)
    - `EDGE_CLIENT_ID`
-   - `EDGE_CLIENT_SECRET`
+   - `EDGE_API_KEY`
 
 ## Usage
 
