@@ -4,6 +4,14 @@ Save web pages as Markdown files with preserved formatting. **Zero setup require
 
 Perfect for documentation, articles, and note-taking.
 
+[![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/pfplfifdaaaalkefgnknfgoiabegcbmf?logo=googlechrome&logoColor=white&label=Chrome%20Users&style=for-the-badge)](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf)
+[![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/pfplfifdaaaalkefgnknfgoiabegcbmf?logo=googlechrome&logoColor=white&label=Chrome&style=for-the-badge)](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf)
+[![Chrome Web Store Rating](https://img.shields.io/chrome-web-store/rating/pfplfifdaaaalkefgnknfgoiabegcbmf?logo=googlechrome&logoColor=white&label=Rating&style=for-the-badge)](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf)
+
+[![Mozilla Add-on Users](https://img.shields.io/amo/users/markdown-printer?logo=firefox&logoColor=white&label=Firefox%20Users&style=for-the-badge)](https://addons.mozilla.org/en-US/firefox/addon/markdown-printer/)
+[![Mozilla Add-on Version](https://img.shields.io/amo/v/markdown-printer?logo=firefox&logoColor=white&label=Firefox&style=for-the-badge)](https://addons.mozilla.org/en-US/firefox/addon/markdown-printer/)
+[![Mozilla Add-on Rating](https://img.shields.io/amo/rating/markdown-printer?logo=firefox&logoColor=white&label=Rating&style=for-the-badge)](https://addons.mozilla.org/en-US/firefox/addon/markdown-printer/)
+
 ## ✨ Features
 
 - 🚀 **No setup required** - works immediately after installation
@@ -25,7 +33,7 @@ Perfect for documentation, articles, and note-taking.
 
 ### Firefox
 
-Coming soon to Firefox Add-ons! For now, use manual installation below.
+**[Install from Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/markdown-printer/)** ⭐
 
 ### Manual Installation (For Development)
 
@@ -95,16 +103,16 @@ See [Pro Version README](extension-pro/README.md) for installation instructions.
 
 ## 🆚 Comparison
 
-| Feature          | Standard                                                                                                   | Pro                   |
-| ---------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
-| Installation     | One-click                                                                                                  | Requires setup script |
-| Browser Support  | Chrome, Edge, Firefox                                                                                      | Chrome, Edge, Firefox |
-| Save location    | Choose each time                                                                                           | Configurable default  |
-| Auto-open files  | ❌                                                                                                         | ✅                    |
-| Settings         | ❌                                                                                                         | ✅                    |
-| Chrome Web Store | ✅ [Available](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf) | ❌ Can't publish      |
-| Edge Add-ons     | ✅ [Available](https://microsoftedge.microsoft.com/addons/detail/mlmakmhfnkbabnhhcnekleemamhpnmgk)         | ❌ Can't publish      |
-| Firefox Add-ons  | 🔜 Coming soon                                                                                             | ❌ Can't publish      |
+| Feature | Standard | Pro |
+|---------|----------|-----|
+| Installation | One-click | Requires setup script |
+| Browser Support | Chrome, Edge, Firefox | Chrome, Edge, Firefox |
+| Save location | Choose each time | Configurable default |
+| Auto-open files | ❌ | ✅ |
+| Settings | ❌ | ✅ |
+| Chrome Web Store | ✅ [Available](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf) | ❌ Can't publish |
+| Edge Add-ons | ✅ [Available](https://microsoftedge.microsoft.com/addons/detail/mlmakmhfnkbabnhhcnekleemamhpnmgk) | ❌ Can't publish |
+| Firefox Add-ons | ✅ [Available](https://addons.mozilla.org/en-US/firefox/addon/markdown-printer/) | ❌ Can't publish |
 
 ## 🛠️ Technical Details
 
@@ -127,6 +135,7 @@ Contributions welcome! Feel free to open issues or submit pull requests.
 
 - [Chrome Web Store](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf) - Install for Chrome
 - [Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/mlmakmhfnkbabnhhcnekleemamhpnmgk) - Install for Edge
+- [Firefox Add-ons](https://addons.mozilla.org/en-US/firefox/addon/markdown-printer/) - Install for Firefox
 - [GitHub Repository](https://github.com/levz0r/markdown-printer)
 - [Report Issues](https://github.com/levz0r/markdown-printer/issues)
 
