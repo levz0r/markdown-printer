@@ -103,16 +103,16 @@ See [Pro Version README](extension-pro/README.md) for installation instructions.
 
 ## 🆚 Comparison
 
-| Feature | Standard | Pro |
-|---------|----------|-----|
-| Installation | One-click | Requires setup script |
-| Browser Support | Chrome, Edge, Firefox | Chrome, Edge, Firefox |
-| Save location | Choose each time | Configurable default |
-| Auto-open files | ❌ | ✅ |
-| Settings | ❌ | ✅ |
-| Chrome Web Store | ✅ [Available](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf) | ❌ Can't publish |
-| Edge Add-ons | ✅ [Available](https://microsoftedge.microsoft.com/addons/detail/mlmakmhfnkbabnhhcnekleemamhpnmgk) | ❌ Can't publish |
-| Firefox Add-ons | ✅ [Available](https://addons.mozilla.org/en-US/firefox/addon/markdown-printer/) | ❌ Can't publish |
+| Feature          | Standard                                                                                                   | Pro                   |
+| ---------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
+| Installation     | One-click                                                                                                  | Requires setup script |
+| Browser Support  | Chrome, Edge, Firefox                                                                                      | Chrome, Edge, Firefox |
+| Save location    | Choose each time                                                                                           | Configurable default  |
+| Auto-open files  | ❌                                                                                                         | ✅                    |
+| Settings         | ❌                                                                                                         | ✅                    |
+| Chrome Web Store | ✅ [Available](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf) | ❌ Can't publish      |
+| Edge Add-ons     | ✅ [Available](https://microsoftedge.microsoft.com/addons/detail/mlmakmhfnkbabnhhcnekleemamhpnmgk)         | ❌ Can't publish      |
+| Firefox Add-ons  | ✅ [Available](https://addons.mozilla.org/en-US/firefox/addon/markdown-printer/)                           | ❌ Can't publish      |
 
 ## 🛠️ Technical Details
 
