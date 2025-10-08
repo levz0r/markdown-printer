@@ -141,13 +141,18 @@ jobs:
             -d "client_id=$EDGE_CLIENT_ID&scope=https://api.addons.microsoftedge.microsoft.com/.default&client_secret=$EDGE_API_KEY&grant_type=client_credentials")
           ACCESS_TOKEN=$(echo $TOKEN_RESPONSE | jq -r '.access_token')
 
-          # Get current version
-          STORE_VERSION=$(curl -s "https://api.addons.microsoftedge.microsoft.com/v1/products/$EDGE_PRODUCT_ID" \
-            -H "Authorization: Bearer $ACCESS_TOKEN" | jq -r '.lastPublishedVersion')
+          # Get product info
+          PRODUCT_INFO=$(curl -s "https://api.addons.microsoftedge.microsoft.com/v1/products/$EDGE_PRODUCT_ID" \
+            -H "Authorization: Bearer $ACCESS_TOKEN")
+
+          # Try multiple possible version fields
+          STORE_VERSION=$(echo $PRODUCT_INFO | jq -r '.lastPublishedVersion // .publishedVersion // .currentVersion // empty')
 
           echo "Current Edge version: $STORE_VERSION"
           echo "Local Chrome version: ${{ steps.versions.outputs.chrome }}"
-          if [ "$STORE_VERSION" != "${{ steps.versions.outputs.chrome }}" ]; then
+
+          # If version is empty/null or doesn't match, publish
+          if [ -z "$STORE_VERSION" ] || [ "$STORE_VERSION" = "null" ] || [ "$STORE_VERSION" != "${{ steps.versions.outputs.chrome }}" ]; then
             echo "needs_publish=true" >> $GITHUB_OUTPUT
           else
             echo "needs_publish=false" >> $GITHUB_OUTPUT
