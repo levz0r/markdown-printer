@@ -99,7 +99,7 @@ jobs:
           npx publish-browser-extension \
             --firefox-zip firefox-extension.zip \
             --firefox-sources-zip firefox-sources.zip \
-            --firefox-extension-id markdown-printer \
+            --firefox-extension-id markdown-printer@lev.engineer \
             --firefox-jwt-issuer "${{ vars.FIREFOX_ISSUER }}" \
             --firefox-jwt-secret "${{ secrets.FIREFOX_SECRET }}"
 
