@@ -47,12 +47,30 @@ jobs:
       # Chrome Web Store
       - name: Check Chrome Web Store version
         id: chrome-check
-        continue-on-error: true
+        env:
+          CHROME_CLIENT_ID: ${{ vars.CHROME_CLIENT_ID }}
+          CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+          CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
         run: |
-          STORE_VERSION=$(curl -s "https://chromewebstore.google.com/detail/pfplfifdaaaalkefgnknfgoiabegcbmf" | grep -oP '"version":"[^"]*"' | head -1 | cut -d'"' -f4)
+          # Get access token
+          TOKEN_RESPONSE=$(curl -s -X POST "https://oauth2.googleapis.com/token" \
+            -d "client_id=$CHROME_CLIENT_ID" \
+            -d "client_secret=$CHROME_CLIENT_SECRET" \
+            -d "refresh_token=$CHROME_REFRESH_TOKEN" \
+            -d "grant_type=refresh_token")
+          ACCESS_TOKEN=$(echo $TOKEN_RESPONSE | jq -r '.access_token')
+
+          # Get current version from Chrome Web Store API
+          ITEM_INFO=$(curl -s -H "Authorization: Bearer $ACCESS_TOKEN" \
+            -H "x-goog-api-version: 2" \
+            "https://www.googleapis.com/chromewebstore/v1.1/items/pfplfifdaaaalkefgnknfgoiabegcbmf?projection=DRAFT")
+
+          STORE_VERSION=$(echo $ITEM_INFO | jq -r '.crxVersion // empty')
+
           echo "Current Chrome version: $STORE_VERSION"
           echo "Local Chrome version: ${{ steps.versions.outputs.chrome }}"
-          if [ "$STORE_VERSION" != "${{ steps.versions.outputs.chrome }}" ]; then
+
+          if [ -z "$STORE_VERSION" ] || [ "$STORE_VERSION" != "${{ steps.versions.outputs.chrome }}" ]; then
             echo "needs_publish=true" >> $GITHUB_OUTPUT
           else
             echo "needs_publish=false" >> $GITHUB_OUTPUT
@@ -79,15 +97,16 @@ jobs:
       # Firefox Add-ons
       - name: Check Firefox Add-ons version
         id: firefox-check
-        continue-on-error: true
         run: |
-          STORE_VERSION=$(curl -s "https://addons.mozilla.org/api/v5/addons/addon/markdown-printer/" | jq -r '.current_version.version')
-          echo "Current Firefox version: $STORE_VERSION"
-          echo "Local Firefox version: ${{ steps.versions.outputs.firefox }}"
-          if [ "$STORE_VERSION" != "${{ steps.versions.outputs.firefox }}" ]; then
-            echo "needs_publish=true" >> $GITHUB_OUTPUT
-          else
+          # Check if version exists in any state (published, pending, etc.)
+          VERSION_EXISTS=$(curl -s "https://addons.mozilla.org/api/v5/addons/addon/markdown-printer/versions/" | jq -r --arg ver "${{ steps.versions.outputs.firefox }}" '.results[] | select(.version == $ver) | .version')
+
+          if [ -n "$VERSION_EXISTS" ]; then
+            echo "Firefox already has version ${{ steps.versions.outputs.firefox }} (published or pending)"
             echo "needs_publish=false" >> $GITHUB_OUTPUT
+          else
+            echo "Firefox needs version ${{ steps.versions.outputs.firefox }}"
+            echo "needs_publish=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Publish to Firefox Add-ons
@@ -111,7 +130,6 @@ jobs:
       # Microsoft Edge Add-ons
       - name: Check Edge Add-ons version
         id: edge-check
-        continue-on-error: true
         env:
           EDGE_PRODUCT_ID: ${{ vars.EDGE_PRODUCT_ID }}
           EDGE_CLIENT_ID: ${{ vars.EDGE_CLIENT_ID }}
