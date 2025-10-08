@@ -4,6 +4,14 @@ Save web pages as Markdown files with preserved formatting. **Zero setup require
 
 Perfect for documentation, articles, and note-taking.
 
+[![Chrome Web Store Users](https://img.shields.io/chrome-web-store/users/pfplfifdaaaalkefgnknfgoiabegcbmf?logo=googlechrome&logoColor=white&label=Chrome%20Users&style=for-the-badge)](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf)
+[![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/pfplfifdaaaalkefgnknfgoiabegcbmf?logo=googlechrome&logoColor=white&label=Chrome&style=for-the-badge)](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf)
+[![Chrome Web Store Rating](https://img.shields.io/chrome-web-store/rating/pfplfifdaaaalkefgnknfgoiabegcbmf?logo=googlechrome&logoColor=white&label=Rating&style=for-the-badge)](https://chromewebstore.google.com/detail/markdown-printer/pfplfifdaaaalkefgnknfgoiabegcbmf)
+
+[![Mozilla Add-on Users](https://img.shields.io/amo/users/markdown-printer?logo=firefox&logoColor=white&label=Firefox%20Users&style=for-the-badge)](https://addons.mozilla.org/en-US/firefox/addon/markdown-printer/)
+[![Mozilla Add-on Version](https://img.shields.io/amo/v/markdown-printer?logo=firefox&logoColor=white&label=Firefox&style=for-the-badge)](https://addons.mozilla.org/en-US/firefox/addon/markdown-printer/)
+[![Mozilla Add-on Rating](https://img.shields.io/amo/rating/markdown-printer?logo=firefox&logoColor=white&label=Rating&style=for-the-badge)](https://addons.mozilla.org/en-US/firefox/addon/markdown-printer/)
+
 ## ✨ Features
 
 - 🚀 **No setup required** - works immediately after installation
