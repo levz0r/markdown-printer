@@ -1,0 +1,154 @@
+name: Publish Extensions
+
+on:
+  workflow_dispatch: # Manual trigger
+  push:
+    tags:
+      - 'v*' # Trigger on version tags like v1.0.4
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build extensions
+        run: pnpm run build
+
+      - name: Get local versions
+        id: versions
+        run: |
+          CHROME_VERSION=$(jq -r '.version' extension-chrome/manifest.json)
+          FIREFOX_VERSION=$(jq -r '.version' extension-firefox/manifest.json)
+          echo "chrome=$CHROME_VERSION" >> $GITHUB_OUTPUT
+          echo "firefox=$FIREFOX_VERSION" >> $GITHUB_OUTPUT
+
+      # Chrome Web Store
+      - name: Check Chrome Web Store version
+        id: chrome-check
+        continue-on-error: true
+        run: |
+          STORE_VERSION=$(curl -s "https://chromewebstore.google.com/detail/pfplfifdaaaalkefgnknfgoiabegcbmf" | grep -oP '"version":"[^"]*"' | head -1 | cut -d'"' -f4)
+          echo "Current Chrome version: $STORE_VERSION"
+          echo "Local Chrome version: ${{ steps.versions.outputs.chrome }}"
+          if [ "$STORE_VERSION" != "${{ steps.versions.outputs.chrome }}" ]; then
+            echo "needs_publish=true" >> $GITHUB_OUTPUT
+          else
+            echo "needs_publish=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Publish to Chrome Web Store
+        if: steps.chrome-check.outputs.needs_publish == 'true'
+        run: |
+          cd dist/chrome
+          zip -r ../../chrome-extension.zip .
+          cd ../..
+          npx publish-browser-extension \
+            --chrome-zip chrome-extension.zip \
+            --chrome-extension-id pfplfifdaaaalkefgnknfgoiabegcbmf \
+            --chrome-client-id "${{ vars.CHROME_CLIENT_ID }}" \
+            --chrome-client-secret "${{ secrets.CHROME_CLIENT_SECRET }}" \
+            --chrome-refresh-token "${{ secrets.CHROME_REFRESH_TOKEN }}"
+
+      - name: Skip Chrome publish
+        if: steps.chrome-check.outputs.needs_publish != 'true'
+        run: echo "✓ Chrome Web Store is already up to date"
+
+      # Firefox Add-ons
+      - name: Check Firefox Add-ons version
+        id: firefox-check
+        continue-on-error: true
+        run: |
+          STORE_VERSION=$(curl -s "https://addons.mozilla.org/api/v5/addons/addon/markdown-printer/" | jq -r '.current_version.version')
+          echo "Current Firefox version: $STORE_VERSION"
+          echo "Local Firefox version: ${{ steps.versions.outputs.firefox }}"
+          if [ "$STORE_VERSION" != "${{ steps.versions.outputs.firefox }}" ]; then
+            echo "needs_publish=true" >> $GITHUB_OUTPUT
+          else
+            echo "needs_publish=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Publish to Firefox Add-ons
+        if: steps.firefox-check.outputs.needs_publish == 'true'
+        run: |
+          cd dist/firefox
+          zip -r ../../firefox-extension.zip .
+          cd ../..
+          zip -r firefox-sources.zip . -x "node_modules/*" -x "dist/*" -x ".git/*"
+          npx publish-browser-extension \
+            --firefox-zip firefox-extension.zip \
+            --firefox-sources-zip firefox-sources.zip \
+            --firefox-extension-id markdown-printer \
+            --firefox-jwt-issuer "${{ vars.FIREFOX_ISSUER }}" \
+            --firefox-jwt-secret "${{ secrets.FIREFOX_SECRET }}"
+
+      - name: Skip Firefox publish
+        if: steps.firefox-check.outputs.needs_publish != 'true'
+        run: echo "✓ Firefox Add-ons is already up to date"
+
+      # Microsoft Edge Add-ons
+      - name: Check Edge Add-ons version
+        id: edge-check
+        continue-on-error: true
+        env:
+          EDGE_PRODUCT_ID: ${{ vars.EDGE_PRODUCT_ID }}
+          EDGE_CLIENT_ID: ${{ vars.EDGE_CLIENT_ID }}
+          EDGE_CLIENT_SECRET: ${{ secrets.EDGE_CLIENT_SECRET }}
+        run: |
+          # Get access token
+          TOKEN_RESPONSE=$(curl -s -X POST "https://login.microsoftonline.com/5c9eedce-81bc-42f3-8823-48ba6258b391/oauth2/v2.0/token" \
+            -H "Content-Type: application/x-www-form-urlencoded" \
+            -d "client_id=$EDGE_CLIENT_ID&scope=https://api.addons.microsoftedge.microsoft.com/.default&client_secret=$EDGE_CLIENT_SECRET&grant_type=client_credentials")
+          ACCESS_TOKEN=$(echo $TOKEN_RESPONSE | jq -r '.access_token')
+
+          # Get current version
+          STORE_VERSION=$(curl -s "https://api.addons.microsoftedge.microsoft.com/v1/products/$EDGE_PRODUCT_ID" \
+            -H "Authorization: Bearer $ACCESS_TOKEN" | jq -r '.lastPublishedVersion')
+
+          echo "Current Edge version: $STORE_VERSION"
+          echo "Local Chrome version: ${{ steps.versions.outputs.chrome }}"
+          if [ "$STORE_VERSION" != "${{ steps.versions.outputs.chrome }}" ]; then
+            echo "needs_publish=true" >> $GITHUB_OUTPUT
+          else
+            echo "needs_publish=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Publish to Edge Add-ons
+        if: steps.edge-check.outputs.needs_publish == 'true'
+        run: |
+          cd dist/chrome
+          zip -r ../../edge-extension.zip .
+          cd ../..
+          npx publish-browser-extension \
+            --edge-zip edge-extension.zip \
+            --edge-product-id "${{ vars.EDGE_PRODUCT_ID }}" \
+            --edge-client-id "${{ vars.EDGE_CLIENT_ID }}" \
+            --edge-client-secret "${{ secrets.EDGE_CLIENT_SECRET }}"
+
+      - name: Skip Edge publish
+        if: steps.edge-check.outputs.needs_publish != 'true'
+        run: echo "✓ Edge Add-ons is already up to date"
+
+      # Summary
+      - name: Publish summary
+        run: |
+          echo "## Publication Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- Chrome: ${{ steps.chrome-check.outputs.needs_publish == 'true' && '✓ Published' || '⊘ Skipped (up to date)' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Firefox: ${{ steps.firefox-check.outputs.needs_publish == 'true' && '✓ Published' || '⊘ Skipped (up to date)' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Edge: ${{ steps.edge-check.outputs.needs_publish == 'true' && '✓ Published' || '⊘ Skipped (up to date)' }}" >> $GITHUB_STEP_SUMMARY
