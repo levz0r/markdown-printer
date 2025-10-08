@@ -30,6 +30,12 @@ jobs:
       - name: Build extensions
         run: pnpm run build
 
+      - name: Prepare distribution directories
+        run: |
+          mkdir -p dist/chrome dist/firefox
+          cp -r extension-chrome/* dist/chrome/
+          cp -r extension-firefox/* dist/firefox/
+
       - name: Get local versions
         id: versions
         run: |
