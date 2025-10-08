@@ -104,11 +104,36 @@ Publication Summary
 - Edge: ⊘ Skipped (up to date)
 ```
 
+## Important Notes
+
+### Auto-Submit Behavior
+
+The workflow is configured with `--skip-submit-review` for Chrome and Edge. This means:
+
+- **Uploads are automatic**: New versions are uploaded to the stores
+- **Review submission is manual**: You must manually submit for review in each store's dashboard
+
+This prevents errors when a version is already pending review (stores reject new submissions during review).
+
+**To publish a new version:**
+
+1. Run the workflow (uploads to stores)
+2. Visit each store's dashboard:
+   - [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole)
+   - [Edge Partner Center](https://partner.microsoft.com/en-us/dashboard/microsoftedge/overview)
+3. Click "Submit for review" manually
+
+**Firefox** automatically submits for review (cannot be skipped).
+
 ## Troubleshooting
 
 ### Chrome: "Invalid refresh token"
 
 Wait an hour after setting up the Chrome Web Store API before generating the refresh token.
+
+### Chrome/Edge: "Item already in review"
+
+This shouldn't happen with `--skip-submit-review` enabled. If you see this error, a version is currently under review. Wait for review completion before uploading a new version.
 
 ### Firefox: "Submission failed"
 
