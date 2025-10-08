@@ -69,7 +69,8 @@ jobs:
             --chrome-extension-id pfplfifdaaaalkefgnknfgoiabegcbmf \
             --chrome-client-id "${{ vars.CHROME_CLIENT_ID }}" \
             --chrome-client-secret "${{ secrets.CHROME_CLIENT_SECRET }}" \
-            --chrome-refresh-token "${{ secrets.CHROME_REFRESH_TOKEN }}"
+            --chrome-refresh-token "${{ secrets.CHROME_REFRESH_TOKEN }}" \
+            --chrome-skip-submit-review
 
       - name: Skip Chrome publish
         if: steps.chrome-check.outputs.needs_publish != 'true'
@@ -144,7 +145,8 @@ jobs:
             --edge-zip edge-extension.zip \
             --edge-product-id "${{ vars.EDGE_PRODUCT_ID }}" \
             --edge-client-id "${{ vars.EDGE_CLIENT_ID }}" \
-            --edge-client-secret "${{ secrets.EDGE_CLIENT_SECRET }}"
+            --edge-client-secret "${{ secrets.EDGE_CLIENT_SECRET }}" \
+            --edge-skip-submit-review
 
       - name: Skip Edge publish
         if: steps.edge-check.outputs.needs_publish != 'true'
