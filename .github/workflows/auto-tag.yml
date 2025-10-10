@@ -1,6 +1,7 @@
 name: Auto Tag on Version Change
 
 on:
+  workflow_dispatch: # Manual trigger
   push:
     branches:
       - main
