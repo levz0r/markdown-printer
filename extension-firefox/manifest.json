@@ -6,16 +6,9 @@
   "default_locale": "en",
   "author": "Lev Gelfenbuim",
   "homepage_url": "https://github.com/levz0r/markdown-printer",
-  "permissions": [
-    "activeTab",
-    "contextMenus",
-    "downloads",
-    "scripting"
-  ],
+  "permissions": ["activeTab", "contextMenus", "downloads", "scripting"],
   "background": {
-    "scripts": [
-      "background.js"
-    ]
+    "scripts": ["background.js"]
   },
   "icons": {
     "16": "icon16.png",
@@ -35,9 +28,7 @@
       "id": "markdown-printer@lev.engineer",
       "strict_min_version": "121.0",
       "data_collection_permissions": {
-        "required": [
-          "none"
-        ]
+        "required": ["none"]
       }
     }
   }
