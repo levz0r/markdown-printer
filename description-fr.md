@@ -55,6 +55,13 @@ Trouvé un bug ou une suggestion ? Signalez-le sur GitHub ou envoyez un email à
 
 ## Historique des versions
 
+### v1.1.0 (2025-10-10)
+
+• Ajout de la prise en charge de l'internationalisation pour l'hébreu, l'hindi et le français
+• Ajout de la prise en charge des langues RTL (droite à gauche) pour l'hébreu et autres langues RTL
+• Ajout de l'affichage du numéro de version dans la popup
+• Amélioration du système de build pour inclure les fichiers de localisation
+
 ### v1.0.3 (2025-10-06)
 
 • Correction de l'extraction de contenu pour fonctionner de manière fiable sur toutes les mises en page de site

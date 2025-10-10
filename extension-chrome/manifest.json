@@ -1,12 +1,17 @@
 {
   "manifest_version": 3,
   "name": "__MSG_extensionName__",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "__MSG_extensionDescription__",
   "default_locale": "en",
   "author": "Lev Gelfenbuim",
   "homepage_url": "https://github.com/levz0r/markdown-printer",
-  "permissions": ["activeTab", "contextMenus", "downloads", "scripting"],
+  "permissions": [
+    "activeTab",
+    "contextMenus",
+    "downloads",
+    "scripting"
+  ],
   "background": {
     "service_worker": "background.js"
   },
