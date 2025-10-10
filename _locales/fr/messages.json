@@ -1,0 +1,18 @@
+{
+  "extensionName": {
+    "message": "Markdown Printer",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Enregistrez des pages web en tant que fichiers Markdown dans votre dossier Téléchargements. Aucune configuration requise !",
+    "description": "Description of the extension"
+  },
+  "savePageButton": {
+    "message": "Enregistrer la page en Markdown",
+    "description": "Button text in popup"
+  },
+  "contextMenuTitle": {
+    "message": "Enregistrer en Markdown",
+    "description": "Context menu item title"
+  }
+}

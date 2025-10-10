@@ -47,6 +47,13 @@ Found a bug or have a suggestion? Report it on GitHub or email hi@lev.engineer
 
 ## Version History
 
+### v1.1.0 (2025-10-10)
+
+• Added internationalization support for Hebrew, Hindi, and French
+• Added RTL (right-to-left) language support for Hebrew and other RTL languages
+• Added version number display in popup
+• Improved build system to include localization files
+
 ### v1.0.3 (2025-10-06)
 
 • Fixed content extraction to work reliably across all site layouts

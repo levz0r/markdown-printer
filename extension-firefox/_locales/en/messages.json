@@ -1,0 +1,18 @@
+{
+  "extensionName": {
+    "message": "Markdown Printer",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "Save web pages as Markdown files to your Downloads folder. No setup required!",
+    "description": "Description of the extension"
+  },
+  "savePageButton": {
+    "message": "Save Page as Markdown",
+    "description": "Button text in popup"
+  },
+  "contextMenuTitle": {
+    "message": "Save as Markdown",
+    "description": "Context menu item title"
+  }
+}

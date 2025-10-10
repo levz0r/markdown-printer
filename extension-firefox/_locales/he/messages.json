@@ -1,0 +1,18 @@
+{
+  "extensionName": {
+    "message": "Markdown Printer",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "שמור דפי אינטרנט כקבצי Markdown לתיקיית ההורדות. ללא הגדרות נדרשות!",
+    "description": "Description of the extension"
+  },
+  "savePageButton": {
+    "message": "שמור דף כ-Markdown",
+    "description": "Button text in popup"
+  },
+  "contextMenuTitle": {
+    "message": "שמור כ-Markdown",
+    "description": "Context menu item title"
+  }
+}

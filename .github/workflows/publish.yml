@@ -183,3 +183,21 @@ jobs:
           echo "- Chrome: ${{ steps.chrome-check.outputs.needs_publish == 'true' && '✓ Published' || '⊘ Skipped (up to date)' }}" >> $GITHUB_STEP_SUMMARY
           echo "- Firefox: ${{ steps.firefox-check.outputs.needs_publish == 'true' && '✓ Published' || '⊘ Skipped (up to date)' }}" >> $GITHUB_STEP_SUMMARY
           echo "- Edge: ${{ steps.edge-check.outputs.needs_publish == 'true' && '✓ Published' || '⊘ Skipped (up to date)' }}" >> $GITHUB_STEP_SUMMARY
+
+      # Create GitHub Release with built packages
+      - name: Get version
+        id: get_version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "v${{ steps.get_version.outputs.version }}" \
+            --title "v${{ steps.get_version.outputs.version }}" \
+            --notes "See [CHANGELOG](https://github.com/${{ github.repository }}/blob/main/description.md#version-history) for details." \
+            chrome-extension.zip#"Chrome Extension" \
+            firefox-extension.zip#"Firefox Extension" \
+            edge-extension.zip#"Edge Extension"
