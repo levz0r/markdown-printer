@@ -1,0 +1,18 @@
+{
+  "extensionName": {
+    "message": "Markdown Printer",
+    "description": "Name of the extension"
+  },
+  "extensionDescription": {
+    "message": "वेब पेजों को Markdown फ़ाइलों के रूप में अपने डाउनलोड फ़ोल्डर में सहेजें। किसी सेटअप की आवश्यकता नहीं!",
+    "description": "Description of the extension"
+  },
+  "savePageButton": {
+    "message": "पेज को Markdown के रूप में सहेजें",
+    "description": "Button text in popup"
+  },
+  "contextMenuTitle": {
+    "message": "Markdown के रूप में सहेजें",
+    "description": "Context menu item title"
+  }
+}

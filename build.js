@@ -26,12 +26,16 @@ const commonFiles = [
   'icon128.png',
 ];
 
+// Common directories to copy
+const commonDirs = ['_locales'];
+
 // Manifest templates
 const chromeManifest = {
   manifest_version: 3,
-  name: 'Markdown Printer',
+  name: '__MSG_extensionName__',
   version: version,
-  description: 'Save web pages as Markdown files to your Downloads folder. No setup required!',
+  description: '__MSG_extensionDescription__',
+  default_locale: 'en',
   author: 'Lev Gelfenbuim',
   homepage_url: 'https://github.com/levz0r/markdown-printer',
   permissions: ['activeTab', 'contextMenus', 'downloads', 'scripting'],
@@ -91,6 +95,31 @@ function copyFiles(sourceDir, destDir, files) {
   });
 }
 
+// Function to copy directories recursively
+function copyDir(src, dest) {
+  if (!fs.existsSync(src)) {
+    console.warn(`  ⚠ Warning: Directory ${src} not found`);
+    return;
+  }
+
+  ensureDir(dest);
+
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+
+    if (entry.isDirectory()) {
+      copyDir(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
+
+  console.log(`  ✓ Copied directory ${path.basename(src)}/`);
+}
+
 // Function to create zip package
 function createZip(sourceDir, outputName) {
   try {
@@ -114,6 +143,11 @@ if (buildChrome) {
     copyFiles(sourceDir, chromeDir, commonFiles);
   }
 
+  // Copy common directories (like _locales)
+  commonDirs.forEach(dir => {
+    copyDir(dir, path.join(chromeDir, dir));
+  });
+
   // Write manifest
   fs.writeFileSync(path.join(chromeDir, 'manifest.json'), JSON.stringify(chromeManifest, null, 2));
   console.log('  ✓ Updated manifest.json');
@@ -136,6 +170,11 @@ if (buildFirefox) {
   if (sourceDir !== firefoxDir) {
     copyFiles(sourceDir, firefoxDir, commonFiles);
   }
+
+  // Copy common directories (like _locales)
+  commonDirs.forEach(dir => {
+    copyDir(dir, path.join(firefoxDir, dir));
+  });
 
   // Write manifest
   fs.writeFileSync(

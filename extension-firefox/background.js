@@ -5,7 +5,7 @@ const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
 browserAPI.runtime.onInstalled.addListener(() => {
   browserAPI.contextMenus.create({
     id: 'saveAsMarkdown',
-    title: 'Save as Markdown',
+    title: browserAPI.i18n.getMessage('contextMenuTitle'),
     contexts: ['page'],
   });
 });
