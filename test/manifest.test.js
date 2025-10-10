@@ -34,11 +34,17 @@ describe('Manifest Validation', () => {
   describe('Common Fields', () => {
     test('both manifests have same name', () => {
       expect(chromeManifest.name).toBe(firefoxManifest.name);
-      expect(chromeManifest.name).toBe('Markdown Printer');
+      expect(chromeManifest.name).toBe('__MSG_extensionName__');
     });
 
     test('both manifests have same description', () => {
       expect(chromeManifest.description).toBe(firefoxManifest.description);
+      expect(chromeManifest.description).toBe('__MSG_extensionDescription__');
+    });
+
+    test('both manifests have default_locale set to en', () => {
+      expect(chromeManifest.default_locale).toBe('en');
+      expect(firefoxManifest.default_locale).toBe('en');
     });
 
     test('both manifests use Manifest V3', () => {
@@ -166,6 +172,55 @@ describe('Manifest Validation', () => {
 
       requiredFiles.forEach(file => {
         expect(fs.existsSync(path.join(firefoxDir, file))).toBe(true);
+      });
+    });
+  });
+
+  describe('Internationalization', () => {
+    test('_locales directory exists', () => {
+      const localesDir = path.join(__dirname, '../_locales');
+      expect(fs.existsSync(localesDir)).toBe(true);
+    });
+
+    test('has required locale directories', () => {
+      const localesDir = path.join(__dirname, '../_locales');
+      const requiredLocales = ['en', 'he', 'hi', 'fr'];
+
+      requiredLocales.forEach(locale => {
+        const localeDir = path.join(localesDir, locale);
+        expect(fs.existsSync(localeDir)).toBe(true);
+      });
+    });
+
+    test('each locale has messages.json', () => {
+      const localesDir = path.join(__dirname, '../_locales');
+      const requiredLocales = ['en', 'he', 'hi', 'fr'];
+
+      requiredLocales.forEach(locale => {
+        const messagesPath = path.join(localesDir, locale, 'messages.json');
+        expect(fs.existsSync(messagesPath)).toBe(true);
+      });
+    });
+
+    test('messages.json files have required keys', () => {
+      const localesDir = path.join(__dirname, '../_locales');
+      const requiredLocales = ['en', 'he', 'hi', 'fr'];
+      const requiredKeys = [
+        'extensionName',
+        'extensionDescription',
+        'savePageButton',
+        'contextMenuTitle',
+      ];
+
+      requiredLocales.forEach(locale => {
+        const messagesPath = path.join(localesDir, locale, 'messages.json');
+        const messages = JSON.parse(fs.readFileSync(messagesPath, 'utf8'));
+
+        requiredKeys.forEach(key => {
+          expect(messages).toHaveProperty(key);
+          expect(messages[key]).toHaveProperty('message');
+          expect(messages[key].message).toBeTruthy();
+        });
       });
     });
   });
