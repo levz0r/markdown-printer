@@ -47,6 +47,13 @@ Found a bug or have a suggestion? Report it on GitHub or email hi@lev.engineer
 
 ## Version History
 
+### v1.1.1 (2025-11-24)
+
+• Improved content capture for documentation sites (API docs, tutorials)
+• 2x faster scrolling during page capture
+• Added attribution line with version and author link
+• Fixed progress overlay appearing in output
+
 ### v1.1.0 (2025-10-10)
 
 • Added internationalization support for Hebrew, Hindi, and French

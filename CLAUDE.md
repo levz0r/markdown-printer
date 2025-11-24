@@ -14,6 +14,27 @@
 - Ensure all tests pass
 - Verify no linting errors
 
+## Version Bump Checklist
+
+**ALWAYS do these before bumping version:**
+
+1. **Update description files** with changelog for new version:
+   - `description.md` (English)
+   - `description-fr.md` (French)
+   - `description-he.md` (Hebrew)
+   - `description-hi.md` (Hindi)
+
+2. **Bump version** in all files:
+   - `package.json`
+   - `extension-chrome/manifest.json`
+   - `extension-firefox/manifest.json`
+
+3. **Run pre-commit checks**: format, test, lint
+
+4. **Commit and push to develop**
+
+5. **Merge to main** to trigger auto-tag and publish
+
 ## Common Commands
 
 ```bash

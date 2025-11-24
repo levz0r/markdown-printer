@@ -55,6 +55,13 @@ Trouvé un bug ou une suggestion ? Signalez-le sur GitHub ou envoyez un email à
 
 ## Historique des versions
 
+### v1.1.1 (2025-11-24)
+
+• Amélioration de la capture de contenu pour les sites de documentation (docs API, tutoriels)
+• Défilement 2x plus rapide pendant la capture de page
+• Ajout d'une ligne d'attribution avec version et lien auteur
+• Correction de l'overlay de progression apparaissant dans la sortie
+
 ### v1.1.0 (2025-10-10)
 
 • Ajout de la prise en charge de l'internationalisation pour l'hébreu, l'hindi et le français
