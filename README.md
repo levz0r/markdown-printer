@@ -78,6 +78,8 @@ Example:
 **Source:** https://example.com/docs/getting-started
 **Saved:** 2025-10-01T12:00:00.000Z
 
+_Generated with [markdown-printer](https://github.com/levz0r/markdown-printer) (v1.1.0) by [Lev Gelfenbuim](https://lev.engineer)_
+
 ---
 
 [Your page content in Markdown format]
@@ -125,6 +127,26 @@ MIT License - see [LICENSE](LICENSE) file for details
 ## 🤝 Contributing
 
 Contributions welcome! Feel free to open issues or submit pull requests.
+
+### Development
+
+The extension uses a shared codebase for Chrome and Firefox:
+
+```
+src/
+  background.js          # Source of truth - edit this file
+extension-chrome/
+  background.js          # Copied from src/ during build
+extension-firefox/
+  background.js          # Copied from src/ during build
+```
+
+**Workflow:**
+
+1. Edit `src/background.js`
+2. Run `pnpm run build` to copy to both extensions
+3. Load unpacked extension from `extension-chrome/` or `extension-firefox/`
+4. Run `pnpm run format && pnpm run test && pnpm run lint` before committing
 
 ## 🔗 Links
 

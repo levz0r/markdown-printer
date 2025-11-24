@@ -15,16 +15,8 @@ const args = process.argv.slice(2);
 const buildChrome = args.length === 0 || args.includes('chrome');
 const buildFirefox = args.length === 0 || args.includes('firefox');
 
-// Common files to copy
-const commonFiles = [
-  'background.js',
-  'popup.html',
-  'popup.js',
-  'turndown.js',
-  'icon16.png',
-  'icon48.png',
-  'icon128.png',
-];
+// Shared source files (copied from src/ to both extensions)
+const sharedSourceFiles = ['background.js'];
 
 // Common directories to copy
 const commonDirs = ['_locales'];
@@ -137,11 +129,8 @@ if (buildChrome) {
   const chromeDir = 'extension-chrome';
   ensureDir(chromeDir);
 
-  // Use existing files or copy from a source
-  const sourceDir = fs.existsSync(chromeDir) ? chromeDir : 'extension-firefox';
-  if (sourceDir !== chromeDir) {
-    copyFiles(sourceDir, chromeDir, commonFiles);
-  }
+  // Copy shared source files from src/
+  copyFiles('src', chromeDir, sharedSourceFiles);
 
   // Copy common directories (like _locales)
   commonDirs.forEach(dir => {
@@ -165,11 +154,8 @@ if (buildFirefox) {
   const firefoxDir = 'extension-firefox';
   ensureDir(firefoxDir);
 
-  // Use existing files or copy from a source
-  const sourceDir = fs.existsSync(firefoxDir) ? firefoxDir : 'extension-chrome';
-  if (sourceDir !== firefoxDir) {
-    copyFiles(sourceDir, firefoxDir, commonFiles);
-  }
+  // Copy shared source files from src/
+  copyFiles('src', firefoxDir, sharedSourceFiles);
 
   // Copy common directories (like _locales)
   commonDirs.forEach(dir => {
