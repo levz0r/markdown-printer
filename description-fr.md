@@ -55,6 +55,14 @@ Trouvé un bug ou une suggestion ? Signalez-le sur GitHub ou envoyez un email à
 
 ## Historique des versions
 
+### v1.2.0 (2026-05-11)
+
+• Ajout d'un bouton « Copier les diagnostics » dans le popup — capture l'activité récente pour les rapports de bug sans partager de données de navigation
+• Nouveau prompt de feedback optionnel dans le popup qui n'apparaît qu'après un usage prolongé
+• Version Pro : rotation améliorée des journaux dans ~/.markdown-printer/logs/ pour faciliter le dépannage
+• Suivi des erreurs en arrière-plan pour aider à diagnostiquer les échecs silencieux
+• Localisation de toutes les nouvelles chaînes en anglais, français, hébreu et hindi
+
 ### v1.1.1 (2025-11-24)
 
 • Amélioration de la capture de contenu pour les sites de documentation (docs API, tutoriels)

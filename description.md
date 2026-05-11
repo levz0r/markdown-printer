@@ -47,6 +47,14 @@ Found a bug or have a suggestion? Report it on GitHub or email hi@lev.engineer
 
 ## Version History
 
+### v1.2.0 (2026-05-11)
+
+• Added "Copy diagnostics" button in the popup — captures recent activity for bug reports without sharing any browsing data
+• New optional in-popup feedback prompt that only appears after extended use
+• Pro version: improved log rotation under ~/.markdown-printer/logs/ for easier troubleshooting
+• Background error tracking to help diagnose silent failures
+• Localized all new strings in English, French, Hebrew, and Hindi
+
 ### v1.1.1 (2025-11-24)
 
 • Improved content capture for documentation sites (API docs, tutorials)
