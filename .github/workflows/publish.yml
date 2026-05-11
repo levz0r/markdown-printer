@@ -89,8 +89,7 @@ jobs:
             --chrome-extension-id pfplfifdaaaalkefgnknfgoiabegcbmf \
             --chrome-client-id "${{ vars.CHROME_CLIENT_ID }}" \
             --chrome-client-secret "${{ secrets.CHROME_CLIENT_SECRET }}" \
-            --chrome-refresh-token "${{ secrets.CHROME_REFRESH_TOKEN }}" \
-            --chrome-skip-submit-review
+            --chrome-refresh-token "${{ secrets.CHROME_REFRESH_TOKEN }}"
 
       - name: Skip Chrome publish
         if: steps.chrome-check.outputs.needs_publish != 'true'

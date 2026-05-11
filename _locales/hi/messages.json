@@ -14,5 +14,61 @@
   "contextMenuTitle": {
     "message": "Markdown के रूप में सहेजें",
     "description": "Context menu item title"
+  },
+  "savingButton": {
+    "message": "सहेजा जा रहा है...",
+    "description": "Save button label while a save is in progress"
+  },
+  "savedButton": {
+    "message": "सहेजा गया!",
+    "description": "Save button label after a successful save"
+  },
+  "errorRetry": {
+    "message": "त्रुटि - पुनः प्रयास करें",
+    "description": "Save button label after a save failure"
+  },
+  "ratingPromptTitle": {
+    "message": "क्या आपको Markdown Printer पसंद आ रहा है?",
+    "description": "Initial rating prompt title"
+  },
+  "ratingYes": {
+    "message": "👍 हाँ",
+    "description": "Rating prompt positive response"
+  },
+  "ratingNo": {
+    "message": "👎 ज़्यादा नहीं",
+    "description": "Rating prompt negative response"
+  },
+  "ratingHappyTitle": {
+    "message": "बढ़िया! क्या आप एक त्वरित समीक्षा देंगे?",
+    "description": "Rating prompt follow-up after positive response"
+  },
+  "ratingReviewBtn": {
+    "message": "समीक्षा दें",
+    "description": "Button that opens the store review page"
+  },
+  "ratingUnhappyTitle": {
+    "message": "क्षमा करें! क्या गलत हुआ?",
+    "description": "Rating prompt follow-up after negative response"
+  },
+  "ratingReportBtn": {
+    "message": "समस्या रिपोर्ट करें",
+    "description": "Button that opens the GitHub issue tracker"
+  },
+  "ratingDismiss": {
+    "message": "बंद करें",
+    "description": "Accessible label for the rating prompt close button"
+  },
+  "copyDiagnostics": {
+    "message": "डायग्नोस्टिक्स कॉपी करें",
+    "description": "Button that copies the diagnostic bundle to the clipboard"
+  },
+  "diagnosticsCopied": {
+    "message": "कॉपी हो गया!",
+    "description": "Diagnostics button label after a successful copy"
+  },
+  "diagnosticsCopyFailed": {
+    "message": "कॉपी विफल",
+    "description": "Diagnostics button label after a failed copy"
   }
 }

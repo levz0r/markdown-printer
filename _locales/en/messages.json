@@ -14,5 +14,61 @@
   "contextMenuTitle": {
     "message": "Save as Markdown",
     "description": "Context menu item title"
+  },
+  "savingButton": {
+    "message": "Saving...",
+    "description": "Save button label while a save is in progress"
+  },
+  "savedButton": {
+    "message": "Saved!",
+    "description": "Save button label after a successful save"
+  },
+  "errorRetry": {
+    "message": "Error - Try again",
+    "description": "Save button label after a save failure"
+  },
+  "ratingPromptTitle": {
+    "message": "Enjoying Markdown Printer?",
+    "description": "Initial rating prompt title"
+  },
+  "ratingYes": {
+    "message": "👍 Yes",
+    "description": "Rating prompt positive response"
+  },
+  "ratingNo": {
+    "message": "👎 Not really",
+    "description": "Rating prompt negative response"
+  },
+  "ratingHappyTitle": {
+    "message": "Great! Mind leaving a quick review?",
+    "description": "Rating prompt follow-up after positive response"
+  },
+  "ratingReviewBtn": {
+    "message": "Leave a review",
+    "description": "Button that opens the store review page"
+  },
+  "ratingUnhappyTitle": {
+    "message": "Sorry! What went wrong?",
+    "description": "Rating prompt follow-up after negative response"
+  },
+  "ratingReportBtn": {
+    "message": "Report an issue",
+    "description": "Button that opens the GitHub issue tracker"
+  },
+  "ratingDismiss": {
+    "message": "Dismiss",
+    "description": "Accessible label for the rating prompt close button"
+  },
+  "copyDiagnostics": {
+    "message": "Copy diagnostics",
+    "description": "Button that copies the diagnostic bundle to the clipboard"
+  },
+  "diagnosticsCopied": {
+    "message": "Copied!",
+    "description": "Diagnostics button label after a successful copy"
+  },
+  "diagnosticsCopyFailed": {
+    "message": "Copy failed",
+    "description": "Diagnostics button label after a failed copy"
   }
 }

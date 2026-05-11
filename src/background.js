@@ -1,14 +1,58 @@
 // Cross-browser compatibility
 const browserAPI = typeof browser !== 'undefined' ? browser : chrome;
 
-// Create context menu on installation
-browserAPI.runtime.onInstalled.addListener(() => {
+// Chrome MV3 service workers expose importScripts; Firefox loads these via
+// the manifest's background.scripts array instead. Order matters:
+// log-buffer.js → logger.js (logger consumes mdpLogBuffer).
+if (typeof importScripts === 'function' && typeof mdpLog === 'undefined') {
+  try {
+    importScripts('log-buffer.js', 'logger.js');
+  } catch (_e) {
+    /* logger optional; ignore */
+  }
+}
+
+// Safe accessors — logger may be unavailable in pathological cases.
+const log = (typeof mdpLog !== 'undefined' && mdpLog) || {
+  error: (...a) => console.error(...a),
+  warn: (...a) => console.warn(...a),
+  info: (...a) => console.info(...a),
+};
+
+// Initialize stats on first install; create context menu on every install/update.
+browserAPI.runtime.onInstalled.addListener(async details => {
+  try {
+    if (details.reason === 'install') {
+      const existing = await browserAPI.storage.local.get('mdpStats');
+      if (!existing.mdpStats) {
+        await browserAPI.storage.local.set({
+          mdpStats: { installedAt: new Date().toISOString(), saveCount: 0 },
+        });
+      }
+    }
+  } catch (e) {
+    log.error('onInstalled: failed to init stats', e);
+  }
+
   browserAPI.contextMenus.create({
     id: 'saveAsMarkdown',
     title: browserAPI.i18n.getMessage('contextMenuTitle'),
     contexts: ['page'],
   });
 });
+
+async function bumpSaveCount() {
+  try {
+    const { mdpStats = {} } = await browserAPI.storage.local.get('mdpStats');
+    mdpStats.saveCount = (mdpStats.saveCount || 0) + 1;
+    if (!mdpStats.installedAt) {
+      mdpStats.installedAt = new Date().toISOString();
+    }
+    await browserAPI.storage.local.set({ mdpStats });
+  } catch (e) {
+    log.error('bumpSaveCount failed', e);
+  }
+}
 
 // Handle context menu click
 browserAPI.contextMenus.onClicked.addListener((info, tab) => {
@@ -126,8 +170,9 @@ async function savePageAsMarkdown(tabId) {
         saveAs: true,
       });
     }
+    await bumpSaveCount();
   } catch (error) {
-    console.error('Error saving markdown:', error);
+    log.error('Error saving markdown:', error);
     throw error;
   }
 }

@@ -9,6 +9,7 @@
     "version:patch": "npm version patch && npm run build",
     "version:minor": "npm version minor && npm run build",
     "version:major": "npm version major && npm run build",
+    "pretest": "node build.js",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",

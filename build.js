@@ -16,7 +16,18 @@ const buildChrome = args.length === 0 || args.includes('chrome');
 const buildFirefox = args.length === 0 || args.includes('firefox');
 
 // Shared source files (copied from src/ to both extensions)
-const sharedSourceFiles = ['background.js'];
+const sharedSourceFiles = [
+  'background.js',
+  'log-buffer.js',
+  'logger.js',
+  'rating-policy.js',
+  'popup.html',
+  'popup.js',
+  'turndown.js',
+  'icon16.png',
+  'icon48.png',
+  'icon128.png',
+];
 
 // Common directories to copy
 const commonDirs = ['_locales'];
@@ -61,7 +72,11 @@ const firefoxManifest = {
     },
   },
   background: {
-    scripts: ['background.js'],
+    // Firefox MV3 runs background.scripts in an event-page context where
+    // importScripts() is unavailable, so logger and its dependency must be
+    // listed here. Order matters: log-buffer.js exposes helpers consumed
+    // by logger.js, which in turn exposes mdpLog used by background.js.
+    scripts: ['log-buffer.js', 'logger.js', 'background.js'],
   },
 };
 

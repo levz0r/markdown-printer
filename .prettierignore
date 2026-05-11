@@ -3,4 +3,5 @@ dist/
 pnpm-lock.yaml
 *.zip
 .DS_Store
+src/turndown.js
 extension-*/turndown.js

@@ -8,11 +8,56 @@ const TurndownService = require('turndown');
 // Native messaging uses stdin/stdout for communication
 // Messages are length-prefixed (4 bytes, native byte order) followed by JSON
 
-// Log errors to file for debugging
-const logFile = path.join(os.homedir(), 'markdown-printer-debug.log');
+// Log to dated files under ~/.markdown-printer/logs/, retaining the last 7.
+const LOG_DIR = path.join(os.homedir(), '.markdown-printer', 'logs');
+const LOG_RETENTION_DAYS = 7;
+
+function ensureLogDir() {
+  try {
+    if (!fs.existsSync(LOG_DIR)) fs.mkdirSync(LOG_DIR, { recursive: true });
+  } catch (_e) {
+    /* swallow — logging must never break the host */
+  }
+}
+
+function pruneOldLogs() {
+  try {
+    if (!fs.existsSync(LOG_DIR)) return;
+    const entries = fs
+      .readdirSync(LOG_DIR)
+      .filter(f => /^host-\d{4}-\d{2}-\d{2}\.log$/.test(f))
+      .sort();
+    while (entries.length > LOG_RETENTION_DAYS) {
+      const oldest = entries.shift();
+      try {
+        fs.unlinkSync(path.join(LOG_DIR, oldest));
+      } catch (_e) {
+        /* ignore */
+      }
+    }
+  } catch (_e) {
+    /* ignore */
+  }
+}
+
+function currentLogPath() {
+  const day = new Date().toISOString().split('T')[0];
+  return path.join(LOG_DIR, `host-${day}.log`);
+}
+
+let prunedThisRun = false;
 function logError(message) {
-  const timestamp = new Date().toISOString();
-  fs.appendFileSync(logFile, `[${timestamp}] ${message}\n`);
+  try {
+    ensureLogDir();
+    if (!prunedThisRun) {
+      pruneOldLogs();
+      prunedThisRun = true;
+    }
+    const timestamp = new Date().toISOString();
+    fs.appendFileSync(currentLogPath(), `[${timestamp}] ${message}\n`);
+  } catch (_e) {
+    /* swallow */
+  }
 }
 
 function readMessage() {
