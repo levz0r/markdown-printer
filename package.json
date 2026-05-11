@@ -12,6 +12,7 @@
     "pretest": "node build.js",
     "test": "jest",
     "test:watch": "jest --watch",
+    "pretest:coverage": "node build.js",
     "test:coverage": "jest --coverage",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
