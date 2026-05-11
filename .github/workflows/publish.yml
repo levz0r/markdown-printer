@@ -80,6 +80,13 @@ jobs:
 
       - name: Publish to Chrome Web Store
         if: steps.chrome-check.outputs.needs_publish == 'true'
+        env:
+          # Pass secrets via env, not inline ${{ ... }} expansion. GitHub
+          # substitutes the literal value into bash before execution, so a
+          # secret containing $ would be re-expanded by bash and corrupted.
+          CHROME_CLIENT_ID: ${{ vars.CHROME_CLIENT_ID }}
+          CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
+          CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
         run: |
           cd dist/chrome
           zip -r ../../chrome-extension.zip .
@@ -87,9 +94,9 @@ jobs:
           npx publish-browser-extension \
             --chrome-zip chrome-extension.zip \
             --chrome-extension-id pfplfifdaaaalkefgnknfgoiabegcbmf \
-            --chrome-client-id "${{ vars.CHROME_CLIENT_ID }}" \
-            --chrome-client-secret "${{ secrets.CHROME_CLIENT_SECRET }}" \
-            --chrome-refresh-token "${{ secrets.CHROME_REFRESH_TOKEN }}"
+            --chrome-client-id "$CHROME_CLIENT_ID" \
+            --chrome-client-secret "$CHROME_CLIENT_SECRET" \
+            --chrome-refresh-token "$CHROME_REFRESH_TOKEN"
 
       - name: Skip Chrome publish
         if: steps.chrome-check.outputs.needs_publish != 'true'
@@ -112,6 +119,9 @@ jobs:
 
       - name: Publish to Firefox Add-ons
         if: steps.firefox-check.outputs.needs_publish == 'true'
+        env:
+          FIREFOX_ISSUER: ${{ vars.FIREFOX_ISSUER }}
+          FIREFOX_SECRET: ${{ secrets.FIREFOX_SECRET }}
         run: |
           cd dist/firefox
           zip -r ../../firefox-extension.zip .
@@ -121,8 +131,8 @@ jobs:
             --firefox-zip firefox-extension.zip \
             --firefox-sources-zip firefox-sources.zip \
             --firefox-extension-id markdown-printer@lev.engineer \
-            --firefox-jwt-issuer "${{ vars.FIREFOX_ISSUER }}" \
-            --firefox-jwt-secret "${{ secrets.FIREFOX_SECRET }}"
+            --firefox-jwt-issuer "$FIREFOX_ISSUER" \
+            --firefox-jwt-secret "$FIREFOX_SECRET"
 
       - name: Skip Firefox publish
         if: steps.firefox-check.outputs.needs_publish != 'true'
@@ -161,15 +171,19 @@ jobs:
 
       - name: Publish to Edge Add-ons
         if: steps.edge-check.outputs.needs_publish == 'true'
+        env:
+          EDGE_PRODUCT_ID: ${{ vars.EDGE_PRODUCT_ID }}
+          EDGE_CLIENT_ID: ${{ vars.EDGE_CLIENT_ID }}
+          EDGE_API_KEY: ${{ secrets.EDGE_API_KEY }}
         run: |
           cd dist/chrome
           zip -r ../../edge-extension.zip .
           cd ../..
           npx publish-browser-extension \
             --edge-zip edge-extension.zip \
-            --edge-product-id "${{ vars.EDGE_PRODUCT_ID }}" \
-            --edge-client-id "${{ vars.EDGE_CLIENT_ID }}" \
-            --edge-api-key "${{ secrets.EDGE_API_KEY }}" \
+            --edge-product-id "$EDGE_PRODUCT_ID" \
+            --edge-client-id "$EDGE_CLIENT_ID" \
+            --edge-api-key "$EDGE_API_KEY" \
             --edge-skip-submit-review
 
       - name: Skip Edge publish
