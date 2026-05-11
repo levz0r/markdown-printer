@@ -1,0 +1,6 @@
+# pnpm 11+ replaced `onlyBuiltDependencies` (in package.json) with
+# `allowBuilds` here. eslint 10 pulls in unrs-resolver, which has a
+# postinstall step to build a native binary; CI fails with
+# ERR_PNPM_IGNORED_BUILDS unless we explicitly allow it.
+allowBuilds:
+  unrs-resolver: true
