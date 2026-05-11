@@ -113,7 +113,11 @@ describe('Manifest Validation', () => {
   describe('Firefox-Specific Fields', () => {
     test('has scripts background', () => {
       expect(firefoxManifest.background).toHaveProperty('scripts');
-      expect(firefoxManifest.background.scripts).toEqual(['background.js']);
+      expect(firefoxManifest.background.scripts).toEqual([
+        'log-buffer.js',
+        'logger.js',
+        'background.js',
+      ]);
     });
 
     test('has browser_specific_settings', () => {
@@ -144,6 +148,9 @@ describe('Manifest Validation', () => {
       const requiredFiles = [
         'manifest.json',
         'background.js',
+        'log-buffer.js',
+        'logger.js',
+        'rating-policy.js',
         'popup.html',
         'popup.js',
         'turndown.js',
@@ -162,6 +169,9 @@ describe('Manifest Validation', () => {
       const requiredFiles = [
         'manifest.json',
         'background.js',
+        'log-buffer.js',
+        'logger.js',
+        'rating-policy.js',
         'popup.html',
         'popup.js',
         'turndown.js',
@@ -210,6 +220,20 @@ describe('Manifest Validation', () => {
         'extensionDescription',
         'savePageButton',
         'contextMenuTitle',
+        'savingButton',
+        'savedButton',
+        'errorRetry',
+        'ratingPromptTitle',
+        'ratingYes',
+        'ratingNo',
+        'ratingHappyTitle',
+        'ratingReviewBtn',
+        'ratingUnhappyTitle',
+        'ratingReportBtn',
+        'ratingDismiss',
+        'copyDiagnostics',
+        'diagnosticsCopied',
+        'diagnosticsCopyFailed',
       ];
 
       requiredLocales.forEach(locale => {

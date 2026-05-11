@@ -14,5 +14,61 @@
   "contextMenuTitle": {
     "message": "שמור כ-Markdown",
     "description": "Context menu item title"
+  },
+  "savingButton": {
+    "message": "שומר...",
+    "description": "Save button label while a save is in progress"
+  },
+  "savedButton": {
+    "message": "נשמר!",
+    "description": "Save button label after a successful save"
+  },
+  "errorRetry": {
+    "message": "שגיאה - נסה שוב",
+    "description": "Save button label after a save failure"
+  },
+  "ratingPromptTitle": {
+    "message": "נהנים מ-Markdown Printer?",
+    "description": "Initial rating prompt title"
+  },
+  "ratingYes": {
+    "message": "👍 כן",
+    "description": "Rating prompt positive response"
+  },
+  "ratingNo": {
+    "message": "👎 לא ממש",
+    "description": "Rating prompt negative response"
+  },
+  "ratingHappyTitle": {
+    "message": "מצוין! אפשר להשאיר ביקורת קצרה?",
+    "description": "Rating prompt follow-up after positive response"
+  },
+  "ratingReviewBtn": {
+    "message": "כתבו ביקורת",
+    "description": "Button that opens the store review page"
+  },
+  "ratingUnhappyTitle": {
+    "message": "מצטערים! מה השתבש?",
+    "description": "Rating prompt follow-up after negative response"
+  },
+  "ratingReportBtn": {
+    "message": "דווחו על תקלה",
+    "description": "Button that opens the GitHub issue tracker"
+  },
+  "ratingDismiss": {
+    "message": "סגירה",
+    "description": "Accessible label for the rating prompt close button"
+  },
+  "copyDiagnostics": {
+    "message": "העתק נתוני אבחון",
+    "description": "Button that copies the diagnostic bundle to the clipboard"
+  },
+  "diagnosticsCopied": {
+    "message": "הועתק!",
+    "description": "Diagnostics button label after a successful copy"
+  },
+  "diagnosticsCopyFailed": {
+    "message": "ההעתקה נכשלה",
+    "description": "Diagnostics button label after a failed copy"
   }
 }

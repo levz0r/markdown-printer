@@ -14,5 +14,61 @@
   "contextMenuTitle": {
     "message": "Enregistrer en Markdown",
     "description": "Context menu item title"
+  },
+  "savingButton": {
+    "message": "Enregistrement...",
+    "description": "Save button label while a save is in progress"
+  },
+  "savedButton": {
+    "message": "Enregistré !",
+    "description": "Save button label after a successful save"
+  },
+  "errorRetry": {
+    "message": "Erreur - Réessayer",
+    "description": "Save button label after a save failure"
+  },
+  "ratingPromptTitle": {
+    "message": "Vous aimez Markdown Printer ?",
+    "description": "Initial rating prompt title"
+  },
+  "ratingYes": {
+    "message": "👍 Oui",
+    "description": "Rating prompt positive response"
+  },
+  "ratingNo": {
+    "message": "👎 Pas vraiment",
+    "description": "Rating prompt negative response"
+  },
+  "ratingHappyTitle": {
+    "message": "Super ! Pourriez-vous laisser un avis ?",
+    "description": "Rating prompt follow-up after positive response"
+  },
+  "ratingReviewBtn": {
+    "message": "Laisser un avis",
+    "description": "Button that opens the store review page"
+  },
+  "ratingUnhappyTitle": {
+    "message": "Désolé ! Qu'est-ce qui n'a pas fonctionné ?",
+    "description": "Rating prompt follow-up after negative response"
+  },
+  "ratingReportBtn": {
+    "message": "Signaler un problème",
+    "description": "Button that opens the GitHub issue tracker"
+  },
+  "ratingDismiss": {
+    "message": "Fermer",
+    "description": "Accessible label for the rating prompt close button"
+  },
+  "copyDiagnostics": {
+    "message": "Copier les diagnostics",
+    "description": "Button that copies the diagnostic bundle to the clipboard"
+  },
+  "diagnosticsCopied": {
+    "message": "Copié !",
+    "description": "Diagnostics button label after a successful copy"
+  },
+  "diagnosticsCopyFailed": {
+    "message": "Échec de la copie",
+    "description": "Diagnostics button label after a failed copy"
   }
 }
