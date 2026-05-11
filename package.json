@@ -30,5 +30,10 @@
     "jest": "^30.2.0",
     "prettier": "^3.6.2",
     "publish-browser-extension": "^4.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "unrs-resolver"
+    ]
   }
 }
