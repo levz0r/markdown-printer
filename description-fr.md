@@ -51,57 +51,5 @@ Voir le code source sur GitHub : https://github.com/levz0r/markdown-printer
 
 Trouvé un bug ou une suggestion ? Signalez-le sur GitHub ou envoyez un email à hi@lev.engineer
 
----
-
-## Historique des versions
-
-### v1.2.0 (2026-05-11)
-
-• Ajout d'un bouton « Copier les diagnostics » dans le popup — capture l'activité récente pour les rapports de bug sans partager de données de navigation
-• Nouveau prompt de feedback optionnel dans le popup qui n'apparaît qu'après un usage prolongé
-• Version Pro : rotation améliorée des journaux dans ~/.markdown-printer/logs/ pour faciliter le dépannage
-• Suivi des erreurs en arrière-plan pour aider à diagnostiquer les échecs silencieux
-• Localisation de toutes les nouvelles chaînes en anglais, français, hébreu et hindi
-
-### v1.1.1 (2025-11-24)
-
-• Amélioration de la capture de contenu pour les sites de documentation (docs API, tutoriels)
-• Défilement 2x plus rapide pendant la capture de page
-• Ajout d'une ligne d'attribution avec version et lien auteur
-• Correction de l'overlay de progression apparaissant dans la sortie
-
-### v1.1.0 (2025-10-10)
-
-• Ajout de la prise en charge de l'internationalisation pour l'hébreu, l'hindi et le français
-• Ajout de la prise en charge des langues RTL (droite à gauche) pour l'hébreu et autres langues RTL
-• Ajout de l'affichage du numéro de version dans la popup
-• Amélioration du système de build pour inclure les fichiers de localisation
-
-### v1.0.3 (2025-10-06)
-
-• Correction de l'extraction de contenu pour fonctionner de manière fiable sur toutes les mises en page de site
-• Amélioration de la capture des sites de documentation complexes (Microsoft Learn, etc.)
-• Simplification de la sélection de contenu pour une meilleure compatibilité
-
-### v1.0.2 (2025-10-06)
-
-• Ajout de la capture de page complète avec défilement automatique
-• Charge automatiquement le contenu lazy-loaded avant la conversion
-• Fait défiler toute la page pour déclencher le contenu dynamique
-• Performance de défilement 3x plus rapide
-
-### v1.0.1 (2025-10-05)
-
-• Ajout de la prise en charge de Firefox avec compatibilité multi-navigateurs
-• Amélioration de la sortie Markdown en supprimant les éléments indésirables (scripts, styles, iframes, SVGs)
-• Ajout d'un système de build automatisé avec gestion des versions
-• Meilleure gestion des erreurs pour les pages protégées
-
-### v1.0.0 (2025-10-01)
-
-• Version initiale
-• Conversion Markdown en un clic
-• Prise en charge du menu contextuel clic droit
-• Interface popup dans la barre d'outils
-• Insertion de métadonnées (URL source, date de sauvegarde)
-• Intégration de la boîte de dialogue Enregistrer sous
+📜 HISTORIQUE DES VERSIONS
+Voir le changelog complet : https://github.com/levz0r/markdown-printer/blob/main/CHANGELOG.md
