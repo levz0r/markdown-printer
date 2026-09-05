@@ -30,6 +30,6 @@
     "eslint": "^10.0.0",
     "jest": "^30.2.0",
     "prettier": "^3.6.2",
-    "publish-browser-extension": "^4.0.0"
+    "publish-browser-extension": "^6.0.0"
   }
 }
