@@ -1,6 +1,6 @@
 # Privacy Policy for Markdown Printer
 
-**Last Updated:** October 1, 2025
+**Last Updated:** October 17, 2026
 
 ## Overview
 
@@ -8,9 +8,11 @@ Markdown Printer ("the Extension") is committed to protecting your privacy. This
 
 ## Data Collection
 
-**The Extension does not collect, store, transmit, or share any user data.**
+**The Extension does not transmit or share user data with external servers.**
 
 All operations are performed locally in your web browser. No personal information, browsing history, or saved files are sent to any external servers.
+
+The Extension stores installation time, save counts, rating preferences, and a bounded diagnostic log locally in your browser. The "Copy diagnostics" button copies diagnostic information to your clipboard so you can choose whether to include it in a bug report.
 
 ## How the Extension Works
 
@@ -28,6 +30,7 @@ The Extension requests the following permissions:
 - **downloads**: To save the converted Markdown file to your computer
 - **scripting**: To inject the conversion library into web pages
 - **contextMenus**: To provide a right-click menu option
+- **storage**: To keep save statistics, rating preferences, and diagnostics locally in your browser
 
 These permissions are used solely for the Extension's core functionality and not for data collection.
 
