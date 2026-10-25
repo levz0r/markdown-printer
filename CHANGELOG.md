@@ -2,6 +2,10 @@
 
 All notable changes to Markdown Printer.
 
+## v1.2.1 (2026-10-25)
+
+- Fixed save statistics, rating preferences, and "Copy diagnostics" not being remembered — the extension now declares the `storage` permission it needs (data stays local in your browser)
+
 ## v1.2.0 (2026-05-11)
 
 - Added "Copy diagnostics" button in the popup — captures recent activity for bug reports without sharing any browsing data
