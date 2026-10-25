@@ -131,6 +131,44 @@ async function copyDiagnostics() {
   }, 1500);
 }
 
+// Messages for the error codes set by background.js; anything else shows the
+// raw error so it can be reported.
+const SAVE_ERROR_MESSAGES = {
+  'protected-page': [
+    'errorProtectedPage',
+    "This page can't be saved. Browsers don't let extensions read internal browser pages or extension stores.",
+  ],
+  'page-navigated': [
+    'errorPageNavigated',
+    'The page changed while it was being saved, so nothing was saved. Reload the page and try again.',
+  ],
+};
+
+function showSaveError(code, message) {
+  const known = SAVE_ERROR_MESSAGES[code];
+  const box = document.getElementById('saveError');
+  box.textContent = known
+    ? i18n(known[0], known[1])
+    : message || i18n('errorGeneric', 'Nothing was saved because of an unexpected error.');
+  box.hidden = false;
+}
+
+// A save started from the context menu has nowhere to report failure, so
+// background.js leaves it in storage (and a "!" badge) for the popup.
+async function showLastSaveError() {
+  try {
+    const { mdpLastSaveError } = await browserAPI.storage.local.get('mdpLastSaveError');
+    if (!mdpLastSaveError) {
+      return;
+    }
+    showSaveError(mdpLastSaveError.code, mdpLastSaveError.message);
+    await browserAPI.storage.local.remove('mdpLastSaveError');
+    await browserAPI.action.setBadgeText({ text: '' });
+  } catch (_e) {
+    // Never let this break the popup.
+  }
+}
+
 function applyStaticI18n() {
   document.getElementById('extensionName').textContent = i18n('extensionName', 'Markdown Printer');
   document.getElementById('saveBtn').textContent = i18n('savePageButton', 'Save Page as Markdown');
@@ -158,6 +196,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('version').textContent = `v${manifest.version}`;
 
   document.getElementById('diagBtn').addEventListener('click', copyDiagnostics);
+  showLastSaveError();
   maybeShowRatingPrompt();
 });
 
@@ -166,15 +205,26 @@ document.getElementById('saveBtn').addEventListener('click', async () => {
   const originalText = i18n('savePageButton', 'Save Page as Markdown');
   button.disabled = true;
   button.textContent = i18n('savingButton', 'Saving...');
+  document.getElementById('saveError').hidden = true;
 
+  let response;
   try {
-    await browserAPI.runtime.sendMessage({ action: 'saveAsMarkdown' });
+    response = await browserAPI.runtime.sendMessage({ action: 'saveAsMarkdown' });
+  } catch (error) {
+    response = { success: false, error: error.message };
+  }
+
+  if (response && response.success && response.cancelled) {
+    button.textContent = originalText;
+    button.disabled = false;
+  } else if (response && response.success) {
     button.textContent = i18n('savedButton', 'Saved!');
     setTimeout(() => {
       button.textContent = originalText;
       button.disabled = false;
     }, 1500);
-  } catch (_error) {
+  } else {
+    showSaveError(response && response.code, response && response.error);
     button.textContent = i18n('errorRetry', 'Error - Try again');
     button.disabled = false;
     setTimeout(() => {

@@ -54,10 +54,39 @@ async function bumpSaveCount() {
   }
 }
 
+function saveError(code, message) {
+  const error = new Error(message);
+  error.code = code;
+  return error;
+}
+
+// The context menu has no UI of its own, so a failed save from it marks the
+// toolbar icon and leaves the error for the popup to show when opened.
+async function reportContextMenuError(error) {
+  try {
+    await browserAPI.storage.local.set({
+      mdpLastSaveError: { code: error.code || null, message: error.message, at: Date.now() },
+    });
+    await browserAPI.action.setBadgeBackgroundColor({ color: '#d32f2f' });
+    await browserAPI.action.setBadgeText({ text: '!' });
+  } catch (e) {
+    log.error('reportContextMenuError failed', e);
+  }
+}
+
+async function clearSaveError() {
+  try {
+    await browserAPI.storage.local.remove('mdpLastSaveError');
+    await browserAPI.action.setBadgeText({ text: '' });
+  } catch (e) {
+    log.error('clearSaveError failed', e);
+  }
+}
+
 // Handle context menu click
 browserAPI.contextMenus.onClicked.addListener((info, tab) => {
   if (info.menuItemId === 'saveAsMarkdown') {
-    savePageAsMarkdown(tab.id);
+    savePageAsMarkdown(tab.id).catch(reportContextMenuError);
   }
 });
 
@@ -65,26 +94,31 @@ browserAPI.contextMenus.onClicked.addListener((info, tab) => {
 browserAPI.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'saveAsMarkdown') {
     browserAPI.tabs.query({ active: true, currentWindow: true }, async tabs => {
-      if (tabs[0]) {
-        try {
-          await savePageAsMarkdown(tabs[0].id);
-          sendResponse({ success: true });
-        } catch (error) {
-          sendResponse({ success: false, error: error.message });
+      try {
+        if (!tabs || !tabs[0]) {
+          throw saveError('no-tab', 'Could not find the current tab');
         }
+        const outcome = await savePageAsMarkdown(tabs[0].id);
+        sendResponse({ success: true, cancelled: outcome.cancelled });
+      } catch (error) {
+        sendResponse({ success: false, error: error.message, code: error.code || null });
       }
     });
     return true; // Keep the message channel open for async response
   }
 });
 
+// Resolves to { cancelled } once the download has started; rejects (with
+// error.code set where the cause is known) when nothing was saved.
 async function savePageAsMarkdown(tabId) {
   try {
-    // Inject Turndown library and conversion script
+    await clearSaveError();
+
+    // Inject Turndown library and the expand-click policy used by the conversion script
     await browserAPI.scripting
       .executeScript({
         target: { tabId: tabId },
-        files: ['turndown.js'],
+        files: ['turndown.js', 'expand-policy.js'],
       })
       .catch(error => {
         // Better error message for protected pages
@@ -93,7 +127,8 @@ async function savePageAsMarkdown(tabId) {
           error.message.includes('Cannot access') ||
           error.message.includes('extensions gallery')
         ) {
-          throw new Error(
+          throw saveError(
+            'protected-page',
             'Cannot save this page - extensions are blocked on browser internal pages and extension stores'
           );
         }
@@ -112,9 +147,18 @@ async function savePageAsMarkdown(tabId) {
 
     const result = results[0].result;
 
-    // If operation was cancelled, exit without showing save dialog
-    if (!result || result === null) {
-      return;
+    // The user pressed Abort on the progress overlay: no download, not an error
+    if (result && result.cancelled) {
+      return { cancelled: true };
+    }
+
+    // No result at all means the capture script died before finishing,
+    // which happens when the tab navigates to another page mid-capture
+    if (!result) {
+      throw saveError(
+        'page-navigated',
+        'The page changed while it was being saved (it may have navigated to another page)'
+      );
     }
 
     const { markdown, title, url } = result;
@@ -171,6 +215,7 @@ async function savePageAsMarkdown(tabId) {
       });
     }
     await bumpSaveCount();
+    return { cancelled: false };
   } catch (error) {
     log.error('Error saving markdown:', error);
     throw error;
@@ -407,6 +452,11 @@ async function extractAndConvertToMarkdown() {
     const capturedContent = [];
     const capturedHashes = new Set();
 
+    // Never click links or submit buttons: navigating away ends the capture
+    const isSafeToExpand = el =>
+      typeof mdpExpandPolicy !== 'undefined' &&
+      mdpExpandPolicy.isSafeToExpand(el, window.location.href);
+
     // First, try to expand any collapsed/hidden sections
     const expandCollapsedSections = () => {
       // Find and click on common expandable elements
@@ -427,10 +477,11 @@ async function extractAndConvertToMarkdown() {
           try {
             if (el.tagName === 'DETAILS') {
               el.open = true;
-            } else if (el.click) {
+              expandedCount++;
+            } else if (el.click && isSafeToExpand(el)) {
               el.click();
+              expandedCount++;
             }
-            expandedCount++;
           } catch (_e) {
             // Ignore errors
           }
@@ -730,9 +781,9 @@ async function extractAndConvertToMarkdown() {
   // Scroll through the page first
   const scrollResult = await scrollToBottom();
 
-  // If scrolling was cancelled, return null to indicate no download should occur
+  // If scrolling was cancelled, tell the background no download should occur
   if (scrollResult.cancelled) {
-    return null;
+    return { cancelled: true };
   }
 
   // Combine all captured content sections
