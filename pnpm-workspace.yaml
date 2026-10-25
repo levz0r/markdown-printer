@@ -2,5 +2,10 @@
 # `allowBuilds` here. eslint 10 pulls in unrs-resolver, which has a
 # postinstall step to build a native binary; CI fails with
 # ERR_PNPM_IGNORED_BUILDS unless we explicitly allow it.
+#
+# jest 30.5 pulls in @parcel/watcher, whose install script only builds
+# from source when no prebuilt binary matches; the prebuilts ship as
+# optional deps, so skip it (false) rather than run it.
 allowBuilds:
   unrs-resolver: true
+  '@parcel/watcher': false
