@@ -59,6 +59,7 @@ describe('Manifest Validation', () => {
         'contextMenus',
         'downloads',
         'scripting',
+        'storage',
       ]);
     });
 

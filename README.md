@@ -117,7 +117,7 @@ See [Pro Version README](extension-pro/README.md) for installation instructions.
 
 - **Extension Type:** Manifest V3
 - **Conversion:** Turndown.js (client-side)
-- **Permissions:** activeTab, downloads, scripting, contextMenus
+- **Permissions:** activeTab, downloads, scripting, contextMenus, storage (local save statistics, rating preferences, and diagnostics)
 - **File Format:** Markdown (.md)
 - **Browser Support:** Chrome, Edge, Firefox (121+)
 - **Cross-browser:** Separate builds for Chrome and Firefox due to Manifest V3 differences

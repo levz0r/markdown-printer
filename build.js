@@ -41,7 +41,7 @@ const chromeManifest = {
   default_locale: 'en',
   author: 'Lev Gelfenbuim',
   homepage_url: 'https://github.com/levz0r/markdown-printer',
-  permissions: ['activeTab', 'contextMenus', 'downloads', 'scripting'],
+  permissions: ['activeTab', 'contextMenus', 'downloads', 'scripting', 'storage'],
   background: {
     service_worker: 'background.js',
   },
