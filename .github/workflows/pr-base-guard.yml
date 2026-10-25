@@ -1,0 +1,27 @@
+name: PR Base Guard
+
+# main only receives release PRs from develop. Any other PR opened
+# against main is retargeted to develop. Uses pull_request_target so
+# it can edit fork PRs; it never checks out or runs PR code.
+on:
+  pull_request_target:
+    types: [opened, reopened, edited]
+    branches: [main]
+
+permissions:
+  pull-requests: write
+  issues: write
+
+jobs:
+  retarget:
+    if: github.event.pull_request.head.repo.full_name != github.repository || github.event.pull_request.head.ref != 'develop'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Retarget PR to develop
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          gh api -X PATCH "repos/$REPO/pulls/$PR" -f base=develop > /dev/null
+          gh api "repos/$REPO/issues/$PR/comments" -f body="Thanks for the PR! \`main\` only receives releases from \`develop\`, so I've retargeted this to \`develop\`. If GitHub reports conflicts, please rebase onto \`develop\`." > /dev/null
