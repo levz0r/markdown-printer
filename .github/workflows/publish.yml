@@ -48,65 +48,103 @@ jobs:
           echo "chrome=$CHROME_VERSION" >> $GITHUB_OUTPUT
           echo "firefox=$FIREFOX_VERSION" >> $GITHUB_OUTPUT
 
-      # Chrome Web Store
+      # Chrome Web Store (API v2). API v1.1 and its OAuth refresh tokens
+      # stopped working on 2026-10-15; v2 authenticates as a service account.
+      - name: Get Chrome Web Store access token
+        id: chrome-auth
+        env:
+          CHROME_SERVICE_ACCOUNT_KEY: ${{ secrets.CHROME_SERVICE_ACCOUNT_KEY }}
+        run: |
+          # Exchange a JWT signed with the service account's JSON key for a
+          # short-lived OAuth token, shared by the version check and publish.
+          node --input-type=module <<'EOF'
+          import { sign } from 'node:crypto';
+          import { appendFileSync } from 'node:fs';
+
+          const key = JSON.parse(process.env.CHROME_SERVICE_ACCOUNT_KEY);
+          const now = Math.floor(Date.now() / 1000);
+          const b64 = (obj) => Buffer.from(JSON.stringify(obj)).toString('base64url');
+          const unsigned = [
+            b64({ alg: 'RS256', typ: 'JWT' }),
+            b64({
+              iss: key.client_email,
+              scope: 'https://www.googleapis.com/auth/chromewebstore',
+              aud: 'https://oauth2.googleapis.com/token',
+              iat: now,
+              exp: now + 3600,
+            }),
+          ].join('.');
+          const signature = sign('RSA-SHA256', Buffer.from(unsigned), key.private_key);
+
+          const res = await fetch('https://oauth2.googleapis.com/token', {
+            method: 'POST',
+            body: new URLSearchParams({
+              grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+              assertion: `${unsigned}.${signature.toString('base64url')}`,
+            }),
+          });
+          if (!res.ok) {
+            console.error(`Token exchange failed: ${res.status} ${await res.text()}`);
+            process.exit(1);
+          }
+          const { access_token } = await res.json();
+          console.log(`::add-mask::${access_token}`);
+          appendFileSync(process.env.GITHUB_OUTPUT, `access_token=${access_token}\n`);
+          EOF
+
       - name: Check Chrome Web Store version
         id: chrome-check
         env:
-          CHROME_CLIENT_ID: ${{ vars.CHROME_CLIENT_ID }}
-          CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
-          CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          ACCESS_TOKEN: ${{ steps.chrome-auth.outputs.access_token }}
+          CHROME_PUBLISHER_ID: ${{ vars.CHROME_PUBLISHER_ID }}
+          LOCAL_VERSION: ${{ steps.versions.outputs.chrome }}
         run: |
-          # Get access token
-          TOKEN_RESPONSE=$(curl -s -X POST "https://oauth2.googleapis.com/token" \
-            -d "client_id=$CHROME_CLIENT_ID" \
-            -d "client_secret=$CHROME_CLIENT_SECRET" \
-            -d "refresh_token=$CHROME_REFRESH_TOKEN" \
-            -d "grant_type=refresh_token")
-          ACCESS_TOKEN=$(echo $TOKEN_RESPONSE | jq -r '.access_token')
+          # curl -f: fail the step on an API error instead of guessing.
+          STATUS=$(curl -sSf -H "Authorization: Bearer $ACCESS_TOKEN" \
+            "https://chromewebstore.googleapis.com/v2/publishers/$CHROME_PUBLISHER_ID/items/pfplfifdaaaalkefgnknfgoiabegcbmf:fetchStatus")
 
-          # Get current version from Chrome Web Store API
-          ITEM_INFO=$(curl -s -H "Authorization: Bearer $ACCESS_TOKEN" \
-            -H "x-goog-api-version: 2" \
-            "https://www.googleapis.com/chromewebstore/v1.1/items/pfplfifdaaaalkefgnknfgoiabegcbmf?projection=DRAFT")
+          # Versions that are published or currently submitted for review
+          STORE_VERSIONS=$(echo "$STATUS" | jq -r '[.publishedItemRevisionStatus, .submittedItemRevisionStatus][]?.distributionChannels[]?.crxVersion' | sort -u)
 
-          STORE_VERSION=$(echo $ITEM_INFO | jq -r '.crxVersion // empty')
+          echo "Chrome Web Store versions (published/submitted): ${STORE_VERSIONS:-none}"
+          echo "Local Chrome version: $LOCAL_VERSION"
 
-          echo "Current Chrome version: $STORE_VERSION"
-          echo "Local Chrome version: ${{ steps.versions.outputs.chrome }}"
-
-          if [ -z "$STORE_VERSION" ] || [ "$STORE_VERSION" != "${{ steps.versions.outputs.chrome }}" ]; then
-            echo "needs_publish=true" >> $GITHUB_OUTPUT
-          else
+          if echo "$STORE_VERSIONS" | grep -qxF "$LOCAL_VERSION"; then
             echo "needs_publish=false" >> $GITHUB_OUTPUT
+          else
+            echo "needs_publish=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Publish to Chrome Web Store
+        id: chrome-publish
         if: steps.chrome-check.outputs.needs_publish == 'true'
         env:
           # Pass secrets via env, not inline ${{ ... }} expansion. GitHub
           # substitutes the literal value into bash before execution, so a
           # secret containing $ would be re-expanded by bash and corrupted.
-          CHROME_CLIENT_ID: ${{ vars.CHROME_CLIENT_ID }}
-          CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
-          CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          CHROME_PUBLISHER_ID: ${{ vars.CHROME_PUBLISHER_ID }}
+          CHROME_SERVICE_ACCOUNT_ACCESS_TOKEN: ${{ steps.chrome-auth.outputs.access_token }}
         run: |
           cd dist/chrome
           zip -r ../../chrome-extension.zip .
           cd ../..
           npx publish-browser-extension \
+            --chrome-api-version v2 \
             --chrome-zip chrome-extension.zip \
             --chrome-extension-id pfplfifdaaaalkefgnknfgoiabegcbmf \
-            --chrome-client-id "$CHROME_CLIENT_ID" \
-            --chrome-client-secret "$CHROME_CLIENT_SECRET" \
-            --chrome-refresh-token "$CHROME_REFRESH_TOKEN"
+            --chrome-publisher-id "$CHROME_PUBLISHER_ID"
 
       - name: Skip Chrome publish
-        if: steps.chrome-check.outputs.needs_publish != 'true'
+        if: steps.chrome-check.outputs.needs_publish == 'false'
         run: echo "✓ Chrome Web Store is already up to date"
+
+      # Firefox and Edge use !cancelled() so a Chrome failure doesn't block
+      # them; the job still fails overall.
 
       # Firefox Add-ons
       - name: Check Firefox Add-ons version
         id: firefox-check
+        if: ${{ !cancelled() && steps.versions.outcome == 'success' }}
         run: |
           # Check if version exists in any state (published, pending, etc.)
           VERSION_EXISTS=$(curl -s "https://addons.mozilla.org/api/v5/addons/addon/markdown-printer/versions/" | jq -r --arg ver "${{ steps.versions.outputs.firefox }}" '.results[] | select(.version == $ver) | .version')
@@ -120,7 +158,8 @@ jobs:
           fi
 
       - name: Publish to Firefox Add-ons
-        if: steps.firefox-check.outputs.needs_publish == 'true'
+        id: firefox-publish
+        if: ${{ !cancelled() && steps.firefox-check.outputs.needs_publish == 'true' }}
         env:
           FIREFOX_ISSUER: ${{ vars.FIREFOX_ISSUER }}
           FIREFOX_SECRET: ${{ secrets.FIREFOX_SECRET }}
@@ -137,12 +176,13 @@ jobs:
             --firefox-jwt-secret "$FIREFOX_SECRET"
 
       - name: Skip Firefox publish
-        if: steps.firefox-check.outputs.needs_publish != 'true'
+        if: ${{ !cancelled() && steps.firefox-check.outputs.needs_publish == 'false' }}
         run: echo "✓ Firefox Add-ons is already up to date"
 
       # Microsoft Edge Add-ons
       - name: Check Edge Add-ons version
         id: edge-check
+        if: ${{ !cancelled() && steps.versions.outcome == 'success' }}
         env:
           EDGE_PRODUCT_ID: ${{ vars.EDGE_PRODUCT_ID }}
           EDGE_CLIENT_ID: ${{ vars.EDGE_CLIENT_ID }}
@@ -172,7 +212,8 @@ jobs:
           fi
 
       - name: Publish to Edge Add-ons
-        if: steps.edge-check.outputs.needs_publish == 'true'
+        id: edge-publish
+        if: ${{ !cancelled() && steps.edge-check.outputs.needs_publish == 'true' }}
         env:
           EDGE_PRODUCT_ID: ${{ vars.EDGE_PRODUCT_ID }}
           EDGE_CLIENT_ID: ${{ vars.EDGE_CLIENT_ID }}
@@ -185,21 +226,21 @@ jobs:
             --edge-zip edge-extension.zip \
             --edge-product-id "$EDGE_PRODUCT_ID" \
             --edge-client-id "$EDGE_CLIENT_ID" \
-            --edge-api-key "$EDGE_API_KEY" \
-            --edge-skip-submit-review
+            --edge-api-key "$EDGE_API_KEY"
 
       - name: Skip Edge publish
-        if: steps.edge-check.outputs.needs_publish != 'true'
+        if: ${{ !cancelled() && steps.edge-check.outputs.needs_publish == 'false' }}
         run: echo "✓ Edge Add-ons is already up to date"
 
       # Summary
       - name: Publish summary
+        if: ${{ !cancelled() }}
         run: |
           echo "## Publication Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "- Chrome: ${{ steps.chrome-check.outputs.needs_publish == 'true' && '✓ Published' || '⊘ Skipped (up to date)' }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Firefox: ${{ steps.firefox-check.outputs.needs_publish == 'true' && '✓ Published' || '⊘ Skipped (up to date)' }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Edge: ${{ steps.edge-check.outputs.needs_publish == 'true' && '✓ Published' || '⊘ Skipped (up to date)' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Chrome: ${{ steps.chrome-publish.outcome == 'success' && '✓ Published' || steps.chrome-check.outputs.needs_publish == 'false' && '⊘ Skipped (up to date)' || '✗ Failed' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Firefox: ${{ steps.firefox-publish.outcome == 'success' && '✓ Published' || steps.firefox-check.outputs.needs_publish == 'false' && '⊘ Skipped (up to date)' || '✗ Failed' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Edge: ${{ steps.edge-publish.outcome == 'success' && '✓ Published' || steps.edge-check.outputs.needs_publish == 'false' && '⊘ Skipped (up to date)' || '✗ Failed' }}" >> $GITHUB_STEP_SUMMARY
 
       # Create GitHub Release with built packages
       - name: Get version
@@ -214,7 +255,7 @@ jobs:
         run: |
           gh release create "v${{ steps.get_version.outputs.version }}" \
             --title "v${{ steps.get_version.outputs.version }}" \
-            --notes "See [CHANGELOG](https://github.com/${{ github.repository }}/blob/main/description.md#version-history) for details." \
+            --notes "See [CHANGELOG](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md) for details." \
             chrome-extension.zip#"Chrome Extension" \
             firefox-extension.zip#"Firefox Extension" \
             edge-extension.zip#"Edge Extension"
