@@ -13,16 +13,18 @@ jobs:
       contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
         with:
-          version: 11
+          version: 12
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
+          # Keep on 22.x: Node >=24.14's undici breaks the Edge upload in
+          # publish-browser-extension ("expected non-null body source").
           node-version: '22.x'
           cache: 'pnpm'
 

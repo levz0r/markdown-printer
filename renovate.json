@@ -9,6 +9,12 @@
       "automerge": false
     },
     {
+      "description": "publish.yml pins Node 22: Node >=24.14's undici breaks publish-browser-extension's Edge upload",
+      "matchFileNames": [".github/workflows/publish.yml"],
+      "matchDepNames": ["node"],
+      "enabled": false
+    },
+    {
       "groupName": "major dependencies",
       "matchUpdateTypes": ["major"],
       "automerge": false
