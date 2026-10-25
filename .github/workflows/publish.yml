@@ -241,7 +241,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- Chrome: ${{ steps.chrome-publish.outcome == 'success' && '✓ Published' || steps.chrome-check.outputs.needs_publish == 'false' && '⊘ Skipped (up to date)' || '✗ Failed' }}" >> $GITHUB_STEP_SUMMARY
           echo "- Firefox: ${{ steps.firefox-publish.outcome == 'success' && '✓ Published' || steps.firefox-check.outputs.needs_publish == 'false' && '⊘ Skipped (up to date)' || '✗ Failed' }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Edge: ${{ steps.edge-publish.outcome == 'success' && '✓ Published' || steps.edge-check.outputs.needs_publish == 'false' && '⊘ Skipped (up to date)' || '✗ Failed' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Edge: ${{ steps.edge-publish.outcome == 'success' && '⏳ Uploaded — submit for review in Partner Center' || steps.edge-check.outputs.needs_publish == 'false' && '⊘ Skipped (up to date)' || '✗ Failed' }}" >> $GITHUB_STEP_SUMMARY
 
       # Create GitHub Release with built packages
       - name: Get version
