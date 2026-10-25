@@ -226,8 +226,7 @@ jobs:
             --edge-zip edge-extension.zip \
             --edge-product-id "$EDGE_PRODUCT_ID" \
             --edge-client-id "$EDGE_CLIENT_ID" \
-            --edge-api-key "$EDGE_API_KEY" \
-            --edge-skip-submit-review
+            --edge-api-key "$EDGE_API_KEY"
 
       - name: Skip Edge publish
         if: ${{ !cancelled() && steps.edge-check.outputs.needs_publish == 'false' }}
@@ -241,7 +240,7 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "- Chrome: ${{ steps.chrome-publish.outcome == 'success' && '✓ Published' || steps.chrome-check.outputs.needs_publish == 'false' && '⊘ Skipped (up to date)' || '✗ Failed' }}" >> $GITHUB_STEP_SUMMARY
           echo "- Firefox: ${{ steps.firefox-publish.outcome == 'success' && '✓ Published' || steps.firefox-check.outputs.needs_publish == 'false' && '⊘ Skipped (up to date)' || '✗ Failed' }}" >> $GITHUB_STEP_SUMMARY
-          echo "- Edge: ${{ steps.edge-publish.outcome == 'success' && '⏳ Uploaded — submit for review in Partner Center' || steps.edge-check.outputs.needs_publish == 'false' && '⊘ Skipped (up to date)' || '✗ Failed' }}" >> $GITHUB_STEP_SUMMARY
+          echo "- Edge: ${{ steps.edge-publish.outcome == 'success' && '✓ Published' || steps.edge-check.outputs.needs_publish == 'false' && '⊘ Skipped (up to date)' || '✗ Failed' }}" >> $GITHUB_STEP_SUMMARY
 
       # Create GitHub Release with built packages
       - name: Get version

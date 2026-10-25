@@ -32,7 +32,7 @@ The workflow uses Chrome Web Store API v2, which authenticates as a service acco
 1. In [Google Cloud Console](https://console.cloud.google.com/), select a project and enable the **Chrome Web Store API**
 2. Under **IAM & Admin > Service Accounts**, create a service account (no roles needed)
 3. On the service account's **Keys** tab, add a JSON key and download it
-4. In the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole), open **Account** and add the service account's email (one service account per publisher)
+4. In the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole), open **Publisher > Settings** and add the service account's email (one service account per publisher)
 5. Add to GitHub:
    - Secret `CHROME_SERVICE_ACCOUNT_KEY`: the entire contents of the JSON key file
    - Variable `CHROME_PUBLISHER_ID`: the ID in the dashboard URL, `https://chrome.google.com/webstore/devconsole/<publisher-id>`
@@ -108,7 +108,7 @@ Publication Summary
 ### Auto-Submit Behavior
 
 - **Chrome**: uploads are submitted for review automatically.
-- **Edge**: uploads use `--edge-skip-submit-review`. Uploads are automatic, but you must click "Submit for review" in the [Edge Partner Center](https://partner.microsoft.com/en-us/dashboard/microsoftedge/overview).
+- **Edge**: uploads are submitted for review automatically. If a previous version is still under review, Edge rejects the submission and the Edge step fails (Chrome and Firefox still publish); re-run the workflow once the review clears, or submit the uploaded draft in the [Edge Partner Center](https://partner.microsoft.com/en-us/dashboard/microsoftedge/overview).
 - **Firefox**: automatically submits for review (cannot be skipped).
 
 **Note for Chrome:** if a previous version is still under review when the workflow runs, the publish step will fail with "Item already in review". Wait for the pending review to clear before tagging a new version.
@@ -117,11 +117,11 @@ Publication Summary
 
 ### Chrome: "Token exchange failed" or 403 from the version check
 
-Check that `CHROME_SERVICE_ACCOUNT_KEY` holds the full JSON key file, the Chrome Web Store API is enabled in that key's project, the service account's email is added under **Account** in the Developer Dashboard, and `CHROME_PUBLISHER_ID` matches the dashboard URL.
+Check that `CHROME_SERVICE_ACCOUNT_KEY` holds the full JSON key file, the Chrome Web Store API is enabled in that key's project, the service account's email is added under **Publisher > Settings** in the Developer Dashboard, and `CHROME_PUBLISHER_ID` matches the dashboard URL.
 
 ### Chrome/Edge: "Item already in review"
 
-A version is currently under review. Wait for review completion before tagging a new version. (Chrome auto-submits, so this can happen on rapid successive releases.)
+A version is currently under review. Wait for review completion before tagging a new version. (Chrome and Edge auto-submit, so this can happen on rapid successive releases.)
 
 ### Firefox: "Submission failed"
 
