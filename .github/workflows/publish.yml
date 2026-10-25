@@ -23,7 +23,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v7
         with:
-          node-version: '24.x'
+          # Keep on 22.x: Node >=24.14's undici breaks the Edge upload in
+          # publish-browser-extension ("expected non-null body source").
+          node-version: '22.x'
           cache: 'pnpm'
 
       - name: Install dependencies
