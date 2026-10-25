@@ -27,13 +27,15 @@ Add these secrets to your repository at `Settings > Secrets and variables > Acti
 
 #### Chrome Web Store
 
-1. Go to [Google Cloud Console](https://console.cloud.google.com/)
-2. Enable the Chrome Web Store API
-3. Create OAuth 2.0 credentials
-4. Follow [this guide](https://developer.chrome.com/docs/webstore/using-api) to get:
-   - `CHROME_CLIENT_ID`
-   - `CHROME_CLIENT_SECRET`
-   - `CHROME_REFRESH_TOKEN`
+The workflow uses Chrome Web Store API v2, which authenticates as a service account (API v1.1 and its OAuth refresh tokens stopped working on 2026-10-15). See [Google's guide](https://developer.chrome.com/docs/webstore/service-accounts).
+
+1. In [Google Cloud Console](https://console.cloud.google.com/), select a project and enable the **Chrome Web Store API**
+2. Under **IAM & Admin > Service Accounts**, create a service account (no roles needed)
+3. On the service account's **Keys** tab, add a JSON key and download it
+4. In the [Chrome Web Store Developer Dashboard](https://chrome.google.com/webstore/devconsole), open **Account** and add the service account's email (one service account per publisher)
+5. Add to GitHub:
+   - Secret `CHROME_SERVICE_ACCOUNT_KEY`: the entire contents of the JSON key file
+   - Variable `CHROME_PUBLISHER_ID`: the ID in the dashboard URL, `https://chrome.google.com/webstore/devconsole/<publisher-id>`
 
 #### Firefox Add-ons
 
@@ -113,9 +115,9 @@ Publication Summary
 
 ## Troubleshooting
 
-### Chrome: "Invalid refresh token"
+### Chrome: "Token exchange failed" or 403 from the version check
 
-Wait an hour after setting up the Chrome Web Store API before generating the refresh token.
+Check that `CHROME_SERVICE_ACCOUNT_KEY` holds the full JSON key file, the Chrome Web Store API is enabled in that key's project, the service account's email is added under **Account** in the Developer Dashboard, and `CHROME_PUBLISHER_ID` matches the dashboard URL.
 
 ### Chrome/Edge: "Item already in review"
 
@@ -131,7 +133,7 @@ Verify your Product ID is correct by checking your extension's overview page in 
 
 ### Version check fails
 
-If the version check step fails, the workflow will still attempt to publish (using `continue-on-error: true`). Check the logs for details.
+If a store's version check or publish step fails, that store is marked failed in the summary and the job fails, but the other stores still publish. Check the logs for details, then re-run the workflow from the Actions tab; stores that already have the version are skipped.
 
 ## Manual Publishing
 
@@ -140,11 +142,12 @@ If you prefer to publish manually, you can use the CLI directly:
 ```bash
 # Publish to specific stores
 npx publish-browser-extension \
+  --chrome-api-version v2 \
   --chrome-zip dist/chrome.zip \
   --chrome-extension-id pfplfifdaaaalkefgnknfgoiabegcbmf \
-  --chrome-client-id "$CHROME_CLIENT_ID" \
-  --chrome-client-secret "$CHROME_CLIENT_SECRET" \
-  --chrome-refresh-token "$CHROME_REFRESH_TOKEN"
+  --chrome-publisher-id "$CHROME_PUBLISHER_ID" \
+  --chrome-service-account-client-email "$CHROME_SERVICE_ACCOUNT_CLIENT_EMAIL" \
+  --chrome-service-account-private-key "$CHROME_SERVICE_ACCOUNT_PRIVATE_KEY"
 ```
 
 ## Notes
