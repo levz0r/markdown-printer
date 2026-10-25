@@ -8,17 +8,24 @@ on:
     paths:
       - 'package.json'
 
+# Uses the built-in GITHUB_TOKEN, so there is no PAT to expire. A tag
+# pushed with GITHUB_TOKEN doesn't trigger other workflows, so this
+# dispatches the publish workflow on the new tag explicitly
+# (workflow_dispatch is exempt from that rule).
 jobs:
   tag:
+    # Only tag main. The default branch is develop, so a manual dispatch
+    # without --ref main would otherwise tag develop.
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      actions: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v7
         with:
           fetch-depth: 0
-          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Get version from package.json
         id: version
@@ -43,6 +50,12 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git tag -a "${{ steps.version.outputs.tag }}" -m "Release ${{ steps.version.outputs.tag }}"
           git push origin "${{ steps.version.outputs.tag }}"
+
+      - name: Trigger publish
+        if: steps.check_tag.outputs.exists == 'false'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh workflow run publish.yml --repo "${{ github.repository }}" --ref "${{ steps.version.outputs.tag }}"
 
       - name: Tag already exists
         if: steps.check_tag.outputs.exists == 'true'
