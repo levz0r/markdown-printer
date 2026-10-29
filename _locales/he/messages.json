@@ -27,6 +27,18 @@
     "message": "שגיאה - נסה שוב",
     "description": "Save button label after a save failure"
   },
+  "errorProtectedPage": {
+    "message": "לא ניתן לשמור את הדף הזה. דפדפנים לא מאפשרים לתוספים לקרוא דפים פנימיים של הדפדפן או חנויות תוספים.",
+    "description": "Shown in the popup when the current page cannot be scripted by extensions"
+  },
+  "errorPageNavigated": {
+    "message": "הדף השתנה בזמן השמירה, ולכן שום דבר לא נשמר. טען את הדף מחדש ונסה שוב.",
+    "description": "Shown in the popup when the page navigated away during a save"
+  },
+  "errorGeneric": {
+    "message": "שום דבר לא נשמר בגלל שגיאה לא צפויה.",
+    "description": "Shown in the popup when a save failed for an unrecognized reason"
+  },
   "ratingPromptTitle": {
     "message": "נהנים מ-Markdown Printer?",
     "description": "Initial rating prompt title"

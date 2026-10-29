@@ -2,6 +2,12 @@
 
 All notable changes to Markdown Printer.
 
+## v1.2.2 (2026-10-25)
+
+- Fixed the popup showing "Saved!" when nothing was saved — a failed save now says what went wrong (for example, on browser internal pages and extension stores, which browsers don't let extensions read)
+- Fixed pages being left without saving on sites whose menus are links: while expanding collapsed sections, the capture no longer clicks links to other pages or buttons that submit a form
+- A save started from the right-click menu that fails now shows a "!" on the toolbar icon; open the popup to see the reason
+
 ## v1.2.1 (2026-10-25)
 
 - Fixed save statistics, rating preferences, and "Copy diagnostics" not being remembered — the extension now declares the `storage` permission it needs (data stays local in your browser)

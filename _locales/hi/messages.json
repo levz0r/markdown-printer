@@ -27,6 +27,18 @@
     "message": "त्रुटि - पुनः प्रयास करें",
     "description": "Save button label after a save failure"
   },
+  "errorProtectedPage": {
+    "message": "यह पेज सेव नहीं किया जा सकता। ब्राउज़र एक्सटेंशन को ब्राउज़र के आंतरिक पेज या एक्सटेंशन स्टोर पढ़ने नहीं देते।",
+    "description": "Shown in the popup when the current page cannot be scripted by extensions"
+  },
+  "errorPageNavigated": {
+    "message": "सेव करते समय पेज बदल गया, इसलिए कुछ भी सेव नहीं हुआ। पेज रीलोड करके फिर से कोशिश करें।",
+    "description": "Shown in the popup when the page navigated away during a save"
+  },
+  "errorGeneric": {
+    "message": "एक अनपेक्षित त्रुटि के कारण कुछ भी सेव नहीं हुआ।",
+    "description": "Shown in the popup when a save failed for an unrecognized reason"
+  },
   "ratingPromptTitle": {
     "message": "क्या आपको Markdown Printer पसंद आ रहा है?",
     "description": "Initial rating prompt title"

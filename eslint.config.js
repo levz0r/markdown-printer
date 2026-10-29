@@ -45,6 +45,7 @@ module.exports = [
         mdpGetDiagnostics: 'readonly',
         mdpLogBuffer: 'readonly',
         mdpRatingPolicy: 'readonly',
+        mdpExpandPolicy: 'readonly',
       },
     },
     rules: {
@@ -77,7 +78,8 @@ module.exports = [
     },
   },
   {
-    // The UMD-lite wrappers in src/log-buffer.js and src/rating-policy.js
+    // The UMD-lite wrappers in src/log-buffer.js, src/rating-policy.js and
+    // src/expand-policy.js
     // reference `module` so they can also be required from Node tests.
     files: [
       'build.js',
@@ -87,6 +89,7 @@ module.exports = [
       'jest.config.js',
       'src/log-buffer.js',
       'src/rating-policy.js',
+      'src/expand-policy.js',
     ],
     languageOptions: {
       globals: {
