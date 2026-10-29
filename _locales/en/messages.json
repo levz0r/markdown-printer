@@ -27,6 +27,18 @@
     "message": "Error - Try again",
     "description": "Save button label after a save failure"
   },
+  "errorProtectedPage": {
+    "message": "This page can't be saved. Browsers don't let extensions read internal browser pages or extension stores.",
+    "description": "Shown in the popup when the current page cannot be scripted by extensions"
+  },
+  "errorPageNavigated": {
+    "message": "The page changed while it was being saved, so nothing was saved. Reload the page and try again.",
+    "description": "Shown in the popup when the page navigated away during a save"
+  },
+  "errorGeneric": {
+    "message": "Nothing was saved because of an unexpected error.",
+    "description": "Shown in the popup when a save failed for an unrecognized reason"
+  },
   "ratingPromptTitle": {
     "message": "Enjoying Markdown Printer?",
     "description": "Initial rating prompt title"

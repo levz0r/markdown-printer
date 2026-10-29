@@ -60,6 +60,19 @@
         background: #ccc;
         cursor: not-allowed;
       }
+      .save-error {
+        margin-top: 10px;
+        padding: 8px 10px;
+        background: #fdecea;
+        border: 1px solid #f5c2bd;
+        border-radius: 4px;
+        color: #b71c1c;
+        font-size: 12px;
+        line-height: 1.4;
+      }
+      .save-error[hidden] {
+        display: none;
+      }
       .info {
         margin-top: 15px;
         font-size: 12px;
@@ -151,6 +164,7 @@
       <span id="version" class="version"></span>
     </h1>
     <button id="saveBtn"></button>
+    <div id="saveError" class="save-error" role="alert" hidden></div>
 
     <div id="ratingPrompt" class="rating-prompt" hidden>
       <button id="rpDismiss" class="rp-dismiss" aria-label="Dismiss">×</button>

@@ -21,6 +21,7 @@ const sharedSourceFiles = [
   'log-buffer.js',
   'logger.js',
   'rating-policy.js',
+  'expand-policy.js',
   'popup.html',
   'popup.js',
   'turndown.js',

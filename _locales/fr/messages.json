@@ -27,6 +27,18 @@
     "message": "Erreur - Réessayer",
     "description": "Save button label after a save failure"
   },
+  "errorProtectedPage": {
+    "message": "Impossible d'enregistrer cette page. Les navigateurs interdisent aux extensions de lire les pages internes du navigateur et les boutiques d'extensions.",
+    "description": "Shown in the popup when the current page cannot be scripted by extensions"
+  },
+  "errorPageNavigated": {
+    "message": "La page a changé pendant l'enregistrement, rien n'a donc été enregistré. Rechargez la page et réessayez.",
+    "description": "Shown in the popup when the page navigated away during a save"
+  },
+  "errorGeneric": {
+    "message": "Rien n'a été enregistré à cause d'une erreur inattendue.",
+    "description": "Shown in the popup when a save failed for an unrecognized reason"
+  },
   "ratingPromptTitle": {
     "message": "Vous aimez Markdown Printer ?",
     "description": "Initial rating prompt title"
